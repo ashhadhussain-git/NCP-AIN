@@ -413,6 +413,8 @@ becomes imbalanced; do not assume automatic failover or linear bandwidth
 scaling. Cabling, routing, congestion, and shared uplinks can still become
 bottlenecks.
 
+Rail switches are the first switching tier for GPU-facing network links in many rail-optimized designs. A rail groups corresponding endpoint links across servers so their traffic can use a consistent parallel path into the fabric. Some designs use a separate switch per rail; others integrate rail behavior into a leaf layer. Follow the reference topology and map each GPU/NIC port to its switch, uplink, and inter-unit path. A rail alone does not guarantee non-blocking bandwidth, tenant isolation, or automatic failover; those depend on capacity, topology, routing, and configuration.
+
 ### 1.3 Describe GPU-to-GPU communications
 
 **What:** Data movement between GPUs, either within a node over supported
@@ -503,7 +505,7 @@ AI traffic across an Ethernet fabric.
 **How:** Trace the host-to-host path, validate configuration end to end, and
 correlate host and switch telemetry under representative load.
 
-### Spectrum-X and RoCE configuration concepts
+### 2.1 Configure NVIDIA Spectrum-X switches for RoCE
 
 **What:** RoCE carries RDMA traffic over Ethernet; Spectrum-X is NVIDIA's
 Ethernet platform for AI networking.
@@ -532,7 +534,23 @@ switches, adapters, and software as an end-to-end system rather than assuming
 that one switch feature alone guarantees performance. Be ready to diagnose
 asymmetric paths, mismatched MTUs, incorrect priorities, and congestion points.
 
-### QoS, ECN, and PFC
+#### RoCE bring-up and validation workflow
+
+**What:** A staged process validates the switch, host adapter, and Ethernet/RDMA configuration as one end-to-end path.
+
+**Why:** RoCE depends on compatible endpoint and fabric behavior; IP reachability alone does not establish RDMA operation or performance.
+
+**How:** Confirm platform, firmware, driver, and software compatibility; verify physical links, addressing, routes, and end-to-end MTU; check host RDMA device and traffic-class settings; align switch QoS and congestion configuration; test one host pair before adding concurrent flows; record counters and a rollback plan before scaling changes. Use release-specific NVIDIA documentation for commands and supported features.
+
+#### Benchmarking with CloudAI Benchmark
+
+**What:** CloudAI Benchmark measures AI networking behavior under defined, supported test conditions.
+
+**Why:** Link counters and basic point-to-point checks do not necessarily predict performance for an application's communication pattern or a multi-node workload.
+
+**How:** Record topology, versions, workload, scale, and baseline; run supported tests and correlate throughput and latency with endpoint and switch telemetry. Compare like-for-like runs after changing one variable. Follow current documentation; a score alone is not a root-cause diagnosis.
+
+### 2.2 Enable and verify QoS, ECN, PFC, and advanced features
 
 **What:** QoS classifies traffic, ECN marks congestion for endpoint reaction,
 and PFC pauses a selected priority on a link.
@@ -564,7 +582,7 @@ PFC counters, pause duration, drops, and end-host reaction together. Never copy
 thresholds from another deployment without checking platform guidance and
 traffic characteristics.
 
-### Adaptive routing and telemetry
+#### Adaptive routing and telemetry
 
 **What:** Adaptive routing can select among paths using fabric conditions;
 telemetry exposes utilization, congestion, latency, and events.
@@ -589,7 +607,7 @@ slow endpoint or an application waiting on synchronization. Learn how the
 chosen NVIDIA monitoring tools collect and display fabric state, and verify
 sampling intervals and time synchronization before correlating events.
 
-### BGP EVPN, VTEPs, and VNIs
+### 2.3 Configure multi-tenancy with BGP EVPN
 
 **What:** EVPN distributes overlay reachability using BGP; VTEPs encapsulate
 and decapsulate VXLAN; VNIs identify overlay segments.
@@ -620,7 +638,7 @@ Explain how you would check VTEP reachability, BGP session state, route
 advertisement, VNI mapping, and host attachment when one tenant cannot reach a
 remote host.
 
-### NVIDIA Air
+### 2.4 Use NVIDIA Air to simulate network environments
 
 **What:** A network simulation environment for supported NVIDIA networking
 topologies and configurations.
@@ -642,7 +660,7 @@ scenarios. Save the topology, assumptions, commands, and before/after output
 with your notes. Confirm current access and feature availability in NVIDIA's
 documentation.
 
-### What Just Happened (WJH) and NetQ
+### 2.5 Diagnose congestion or packet loss with in-band telemetry and WJH
 
 **What:** WJH helps investigate switch-level packet events; NetQ provides
 broader fabric operations and health visibility, depending on deployment.
@@ -659,6 +677,16 @@ or relevant hardware context, then correlate its timestamp and counters with
 the host and other switches. A reported drop reason is a clue to validate, not
 by itself a complete end-to-end root cause.
 
+In-band telemetry, where supported and enabled, can expose path and queue observations for selected traffic. Correlate those records with WJH, switch counters, and host symptoms; check timestamps, sampling interval, and telemetry scope.
+
+### 2.6 Use NetQ for real-time network monitoring
+
+**What:** NVIDIA NetQ provides fabric-wide operational visibility, including topology, health, and supported congestion or latency measurements depending on deployment and release.
+
+**Why:** Fabric context helps determine whether a problem is isolated to a device or link, follows a path, or spans the wider network.
+
+**How:** Confirm devices report to NetQ, inspect topology and health, then compare time-aligned latency, congestion, link, and event data for the affected path. Correlate findings with switch, WJH, telemetry, host RDMA, and workload evidence. Metrics vary by version; a dashboard alone does not prove root cause.
+
 NetQ provides broader fabric operations and visibility, including topology and
 health information depending on the deployed version and configuration. Use
 it to identify whether an issue is isolated or spans multiple devices, and to
@@ -666,7 +694,7 @@ compare configuration or operational state across the fabric. Know when to
 use event-level switch evidence (WJH) versus fabric-wide context (NetQ); neither
 replaces checking endpoint drivers, application symptoms, and physical links.
 
-### DOCA and SuperNIC
+### 2.7 Install NVIDIA DOCA
 
 **What:** DOCA is NVIDIA's software development framework for supported
 networking platforms; SuperNICs are high-performance adapters for demanding
@@ -679,11 +707,21 @@ RDMA, congestion, and telemetry functions are implemented.
 version compatibility, and inspect supported offloads and operational state
 using current product documentation.
 
+**DOCA installation workflow:** Identify the BlueField generation, operating mode, host OS, firmware, and required services. Select a supported DOCA release and follow its host- or DPU-side installation guide, including prerequisites and any documented reboot or firmware steps. Verify the installed version, device and driver state, required services, and the specific application or offload. Do not mix packages from incompatible releases or assume that installation enables every feature.
+
 DOCA is NVIDIA's software development framework for supported DPUs and
 networking platforms. It includes APIs, libraries, and tools; it is not a
 single switch command or a synonym for all networking software. Understand
 which host or DPU component runs a given service and which device/driver
 versions it requires.
+
+### 2.8 Configure NVIDIA SuperNIC functionality
+
+**What:** NVIDIA SuperNICs provide high-performance host networking and, depending on product and software support, accelerated packet processing, RDMA, congestion management, and telemetry.
+
+**Why:** Adapter offloads can improve data-path efficiency and cooperate with the Ethernet fabric to manage AI traffic at scale.
+
+**How:** Verify adapter model, firmware, driver, link and RDMA state, then validate only the packet-processing and congestion features documented for that product and release. Compare a controlled baseline under representative load using adapter counters, switch queues, ECN/PFC statistics, and workload measurements.
 
 SuperNIC refers to high-performance adapters designed for demanding
 accelerated-computing network workloads. Depending on product and deployment,
