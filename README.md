@@ -445,6 +445,65 @@ on the SM implementation and configuration. Test failover in a controlled
 environment and verify the resulting fabric state rather than assuming that a
 standby is ready merely because its process is running.
 
+### InfiniBand packet anatomy and end-to-end flow
+
+Separate the **control/management plane** from the **data path**. The Subnet
+Manager discovers the subnet and configures information such as identifiers
+and forwarding paths. Once the fabric is configured, the SM is not an
+additional switch hop for every application packet.
+
+An RDMA application typically uses the verbs interface to create a protection
+domain, register memory, create a queue pair (QP), and post work requests.
+Memory registration establishes the permissions and keys used for remote
+access. A completion queue (CQ) reports completion events to the application.
+The exact setup and transport behavior depends on the application and selected
+InfiniBand transport.
+
+```text
+Application
+  -> verbs work request on a QP
+  -> source HCA reads registered source buffer
+  -> packet traverses links and switches on the configured path
+  -> destination HCA validates and performs the requested operation
+  -> destination memory is updated
+  -> completion is placed on a CQ and consumed by the application
+```
+
+For a simplified packet walk, the source HCA forms transport and network
+headers for the operation. The destination QP and packet sequence information
+help the destination transport endpoint identify and process the traffic.
+Switches forward within a subnet using the configured InfiniBand path and
+addressing; a routed multi-subnet design can involve additional global
+address/routing information. Do not assume every fabric uses the same
+addressing or routing mode.
+
+At each physical link, InfiniBand uses credit-based flow control: a sender
+must have available receive-buffer credits before transmitting on that
+virtual lane. QoS service levels can map traffic to virtual lanes, allowing
+classes of traffic to be treated separately. Credits protect the local link
+from overrunning the receiver's buffers; they do not prove that the end-to-end
+path is uncongested or that an application has enough bandwidth.
+
+PKeys also participate in communication permission checks. A healthy physical
+link and a valid route are not sufficient if endpoint partition membership
+does not permit the exchange. Trace both endpoints' PKey configuration and
+membership when only a subset of peers can communicate.
+
+**Walkthrough exercise:** select two endpoints and draw every HCA, switch,
+link, and (if present) router between them. Record the source and destination
+identifiers, relevant QP/transport, PKey, service level/virtual lane, and
+expected forwarding path from your lab documentation. Then predict what you
+would observe if (1) a link is down, (2) a PKey is mismatched, (3) a receive
+buffer has no credits, or (4) the RDMA operation completes but the application
+does not make progress.
+
+**Diagnosis order:** confirm local HCA/port state; confirm fabric discovery
+and SM/path configuration; verify endpoint addressing and PKey membership;
+inspect link errors and VL/credit-related counters supported by the platform;
+then run a controlled reachability and RDMA performance test. Use
+`iblinkinfo`, `ibdiagnet`, UFM, and host-side tools as appropriate, and compare
+timestamps rather than inferring a cause from a single counter.
+
 ### Partition keys (PKeys)
 
 PKeys provide partition-based access control for InfiniBand communication.
@@ -664,6 +723,10 @@ would you verify after changing an NVUE template?
 - [InfiniBand Essentials](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139827)
 - [InfiniBand Network Administration](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139854)
 - [Cumulus Linux Essentials](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139853)
+
+### Additional learning
+
+- [InfiniBand Deep Dive (Udemy)](https://www.udemy.com/course/infiniband-deep-dive/learn/lecture/56215196#overview) — course access may require a Udemy account or enrollment. Add your own takeaways and lab observations after completing the lessons.
 
 When adding notes, prefer your own explanations and cite external sources.
 Avoid committing credentials, exam questions, or materials you do not have
