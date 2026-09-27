@@ -1,0 +1,32 @@
+name: Publish study guide
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+      - "mkdocs.yml"
+      - "build_study_site.py"
+      - ".github/workflows/publish-study-guide.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install MkDocs Material
+        run: pip install mkdocs-material
+      - name: Generate chapter pages
+        run: python build_study_site.py
+      - name: Build and publish site
+        run: mkdocs gh-deploy --force
