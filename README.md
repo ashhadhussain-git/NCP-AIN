@@ -638,6 +638,8 @@ Explain how you would check VTEP reachability, BGP session state, route
 advertisement, VNI mapping, and host attachment when one tenant cannot reach a
 remote host.
 
+**Microsegmentation case study:** Two tenants share the physical Ethernet fabric but must remain isolated. Verify the source access attachment maps to the intended VLAN/VNI and VRF, EVPN route-target policy imports only expected tenant routes, and ACL or service policy permits only the intended flows. Test both allowed same-tenant communication and denied cross-tenant communication. If isolation fails, inspect route learning, VNI/VRF mapping, VTEP reachability, policy counters, and both inner and outer packet headers; successful connectivity alone does not prove tenant separation.
+
 ### 2.4 Use NVIDIA Air to simulate network environments
 
 **What:** A network simulation environment for supported NVIDIA networking
