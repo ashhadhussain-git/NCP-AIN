@@ -1,4 +1,4 @@
-# NCP-AIN Study Guide
+# NCP-AIN Detailed Study Guide
 
 * [Start here — Overview and study plan](README.md#study-plan)
 * [Topology case studies and packet flows](README.md#topology-case-studies-and-packet-flows)
@@ -43,6 +43,14 @@
   * [Safe rollout and verification](README.md#safe-rollout-and-verification)
 * [Official resources](README.md#official-resources)
   * [Suggested readings](README.md#suggested-readings)
+    * [Guided study curriculum](README.md#guided-study-curriculum)
+      * [Module 1 — Map the AI factory](README.md#module-1--map-the-ai-factory)
+      * [Module 2 — Reason about scalable units and rails](README.md#module-2--reason-about-scalable-units-and-rails)
+      * [Module 3 — Follow GPU communication and collectives](README.md#module-3--follow-gpu-communication-and-collectives)
+      * [Module 4 — Understand InfiniBand fabric operation](README.md#module-4--understand-infiniband-fabric-operation)
+      * [Module 5 — Operate and troubleshoot host/fabric interfaces](README.md#module-5--operate-and-troubleshoot-hostfabric-interfaces)
+      * [Module 6 — Compare InfiniBand and Spectrum-X Ethernet](README.md#module-6--compare-infiniband-and-spectrum-x-ethernet)
+      * [Capstone — explain and validate one design](README.md#capstone--explain-and-validate-one-design)
     * [InfiniBand foundations and operations](README.md#infiniband-foundations-and-operations)
     * [AI factory architecture and NVIDIA systems](README.md#ai-factory-architecture-and-nvidia-systems)
     * [BlueField and host interfaces](README.md#bluefield-and-host-interfaces)

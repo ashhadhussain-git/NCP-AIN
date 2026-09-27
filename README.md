@@ -2,7 +2,7 @@
 description: Personal study guide and lab notes for the NVIDIA-Certified Professional AI Networking exam.
 ---
 
-# NCP-AIN Study Notes
+# NCP-AIN Detailed Study Guide
 
 Detailed personal study notes for the NVIDIA-Certified Professional: AI
 Networking (NCP-AIN) exam. Use the explanations and exercises below as a
@@ -31,7 +31,7 @@ questions as you study.
 | [Kubernetes Integration](#4-kubernetes-integration--5) | 5% | Operator, RDMA resources, validation |
 | [Troubleshooting Tools](#5-troubleshooting-tools--20) | 20% | Diagnostic tools and workflows |
 | [Automation and Configuration](#6-automation-and-configuration--10) | 10% | NVUE, Ansible, safe rollout |
-| [Official resources](#official-resources) | — | Vendor docs and courses |
+| [Official resources and guided study curriculum](#official-resources) | — | Sequenced reading, learning goals, exercises, and review questions |
 
 ---
 
@@ -795,6 +795,236 @@ These titles are a curated reading path to complement the chapter notes.
 Unless a link is provided, search the exact title on the named publisher's
 site; NVIDIA documentation and course pages may change URLs or require
 enrollment. Read the source for its full context and version applicability.
+
+### Guided study curriculum
+
+Use these modules to turn the reading list into an active study guide. The
+notes below are original explanations and study tasks, not summaries of
+paywalled or unprovided source text. Read the linked/vendor material for
+platform-specific details, then record your own diagrams and lab output.
+
+#### Module 1 — Map the AI factory
+
+**Study goal:** explain how compute, scale-up links, scale-out fabric,
+management, and storage fit together, and describe the role of each component.
+
+An AI factory is a coordinated system, not just a GPU cluster. A useful
+architecture sketch begins with GPU servers and their local GPU interconnects,
+then shows host adapters, leaf/spine or other fabric tiers, storage services,
+and management/control systems. Add the scalable-unit boundary: identify
+which equipment and links are repeated when the design grows. NVIDIA
+SuperPOD materials and the AI-networking architecture readings can help you
+recognize these layers in a reference design.
+
+BlueField is a programmable DPU platform. In a design, identify whether a
+BlueField device is used for host-facing infrastructure services, network
+connectivity, storage/security offloads, or another supported function. Do
+not assume every deployment uses the same operating mode, interface ownership,
+or service set: consult the appropriate BlueField documentation for the
+product generation and software release.
+
+**Work through the sources:** Key Components of the DGX SuperPOD; NVIDIA DGX
+SuperPOD architecture readings; NVIDIA BlueField Networking Platform; and the
+BlueField-3 Administrator Quick-Start Guide.
+
+**Produce:** draw a block diagram that labels GPU/CPU, NVLink/NVSwitch, NIC or
+SuperNIC, optional BlueField, leaf and spine, storage, and management. Use
+different arrows for GPU payload traffic, storage traffic, and management
+traffic. Add one sentence for each component describing what breaks or
+degrades if it is unavailable.
+
+**Check yourself:** Which links are scale-up and which are scale-out? Where
+does the DPU sit relative to the host and fabric in the deployment you drew?
+Which traffic shares physical infrastructure, and what isolation or QoS
+controls are documented?
+
+#### Module 2 — Reason about scalable units and rails
+
+**Study goal:** explain how a repeatable AI infrastructure unit scales and
+how a rail-optimized topology distributes GPU traffic.
+
+Start with the number of GPUs per node and the number and placement of network
+interfaces. Draw each adapter port through its switch port and fabric tier;
+keep separate lines for separate rails. A rail is useful only when endpoints,
+cabling, switch connectivity, routing, and workload communication all align.
+An apparently multi-rail design can still bottleneck on a shared uplink or an
+uneven route.
+
+Rail-optimized topology validation should be treated as an end-to-end check:
+confirm the expected endpoint-to-rail mapping, validate physical connectivity,
+and compare the discovered/operational topology against the intended design.
+For each failure scenario, state whether traffic is lost, rerouted, or merely
+slower; derive the answer from the design and platform behavior rather than
+assuming failover.
+
+**Work through the sources:** NVIDIA DGX SuperPOD and scalable-infrastructure
+readings; Rail-Optimized Topology Validation; and the rail-optimized-networking
+overview.
+
+**Lab or paper exercise:** draw a two-rail, four-node fabric. Mark GPU 0 and
+GPU 1, their NICs, switches, and uplinks. Trace an all-reduce on each rail.
+Then remove one NIC link in the drawing and annotate affected ranks, remaining
+capacity, possible path changes, and the counters or topology view that would
+confirm the result.
+
+**Check yourself:** What is repeated when one scalable unit is added? Which
+links form the narrowest cut? Does the design provide independent failure
+domains, or do both rails share a component? What evidence validates the
+intended mapping?
+
+#### Module 3 — Follow GPU communication and collectives
+
+**Study goal:** distinguish intra-node GPU communication from inter-node
+communication and describe how collective patterns create network traffic.
+
+Within a supported system, GPUs can exchange data through NVLink/NVSwitch.
+Across nodes, the path typically includes communication software, host/RDMA
+setup, an adapter, the Ethernet/RoCE or InfiniBand fabric, a remote adapter,
+and destination memory. GPUDirect RDMA can avoid a CPU staging copy on a
+supported and correctly configured path, but it does not remove software
+setup, permissions, completion handling, or compatibility requirements.
+
+NCCL provides collective communication primitives used by GPU applications.
+Learn the purpose of all-reduce, reduce-scatter, all-gather, and all-to-all.
+Do not assume one fixed algorithm: a collective may use different schedules
+according to message size, topology, library version, and configuration.
+All-to-all can generate many concurrent exchanges; all-reduce can synchronize
+participants so one slow rank delays completion. Interpret a performance
+result in the context of the algorithm, link placement, message size, and
+concurrency.
+
+**Work through the sources:** Overview of NCCL; NVIDIA NVLink and NVSwitch;
+and the NCCL all-to-all performance article.
+
+**Produce:** for each collective, draw a four-rank example and mark who sends
+to whom in each phase. Trace a single inter-node message from source GPU to
+destination GPU. Note where payload is copied or directly accessed, where
+completion is reported, and where congestion could delay the operation.
+
+**Check yourself:** Why can an application report slow GPU communication when
+all links are technically up? Why is peak NIC line rate not equivalent to
+collective throughput? How could an imbalanced rail or straggling rank affect
+iteration time?
+
+#### Module 4 — Understand InfiniBand fabric operation
+
+**Study goal:** explain how endpoints join an InfiniBand subnet, how traffic
+is addressed and forwarded, and which controls affect reachability.
+
+Begin at the physical port and HCA. A fabric manager/subnet manager discovers
+devices and establishes required subnet configuration and path information.
+Endpoints use adapter/transport state to send RDMA operations; switches
+forward traffic along configured paths. The management/control process
+configures the fabric but is not an extra switch hop for each data packet.
+
+PKeys provide partition membership controls. Service levels and virtual lanes
+affect traffic classification and link-level handling. Link-level credit
+flow control prevents a sender from overrunning the receiver's available
+buffer space on a link; it is not proof that an end-to-end path is free of
+congestion. Keep these mechanisms distinct when diagnosing a failure:
+physical link state, fabric discovery/path configuration, partition
+permission, and application/transport setup are separate checks.
+
+**Work through the sources:** InfiniBand Essentials; Aurelien Degremont and
+Nathan Dauchy's LUG'24 material; Modes of Operation; and the InfiniBand Deep
+Dive course. For course content that requires enrollment, use the course
+directly and write your own notes rather than copying lesson text.
+
+**Produce:** draw an RDMA operation from source queue pair/HCA through each
+switch to the destination HCA and completion queue. Separately draw the SM
+management relationship. Label endpoint addressing, PKey, service
+level/virtual lane, and the checks you would use at each layer.
+
+**Check yourself:** Which failure symptoms suggest cabling or link state?
+Which suggest SM/discovery or path configuration? Which suggest PKey
+membership? What does a successful reachability test prove—and not prove?
+
+#### Module 5 — Operate and troubleshoot host/fabric interfaces
+
+**Study goal:** use host and fabric evidence together, and make safe operational
+changes.
+
+For a host-facing issue, determine which device owns each interface and which
+operating mode is configured before changing state. Record current interface
+configuration, link status, driver/firmware, logs, and relevant counters.
+Follow the platform's documented change and reset procedures; resetting a
+device can disrupt workloads and should not be treated as a routine diagnostic
+shortcut.
+
+Build a diagnostic ladder: confirm local adapter/port and host configuration;
+confirm fabric discovery and paths; check the affected link and switch; test
+reachability; then measure performance under controlled conditions. Logs and
+timestamps help correlate events, but counters should be interpreted with
+their reset interval and device context.
+
+**Work through the sources:** Host-Side Interface Configuration; Logging;
+BlueField-3 Administrator Quick-Start Guide; and BlueField Reset and Reboot
+Procedure.
+
+**Lab or paper exercise:** make a before/after checklist for one interface
+change. Include the intended state, source documentation/version, pre-change
+health, maintenance/impact note, validation test, rollback trigger, and
+post-change logs/counters to capture.
+
+**Check yourself:** How do you distinguish a link-up host interface from a
+working RDMA path? Which evidence belongs to the host, adapter, switch, and
+fabric manager? What is the impact of rebooting or resetting a BlueField or
+adapter in the topology you are studying?
+
+#### Module 6 — Compare InfiniBand and Spectrum-X Ethernet
+
+**Study goal:** trace both traffic types and explain their different
+congestion, control, and observability mechanisms.
+
+For RoCEv2, trace RDMA traffic inside UDP/IP over an Ethernet underlay. Verify
+addressing and MTU, traffic classification, queue/priority mapping, congestion
+signaling, and the endpoint's response. ECN marking and PFC pausing have
+different roles; validate their end-to-end configuration and counters rather
+than treating either as a magic “lossless” switch.
+
+For both Ethernet and InfiniBand, map a flow to physical links and queues.
+Compare the failure domain, path selection, congestion response, and
+diagnostic evidence. Spectrum-X whitepaper and technical articles describe
+NVIDIA Ethernet design goals; SONiC material can provide broader operating
+system context, but feature support and commands are platform/version
+dependent.
+
+**Work through the sources:** NVIDIA Spectrum-X Whitepaper; Turbocharging
+Generative AI Workloads With NVIDIA Spectrum-X Networking Platform; Networking
+for Data Centers and the Era of AI; and SONiC Wiki.
+
+**Produce:** create a side-by-side table for RoCEv2 and InfiniBand covering
+encapsulation/addressing, fabric control, congestion/flow control, QoS
+constructs, common host checks, and fabric diagnostics. Then trace one
+cross-node GPU flow in each fabric and mark where you would inspect drops,
+congestion, link health, and endpoint completion.
+
+**Check yourself:** Why does IP ping not verify RoCE? How are ECN and PFC
+different? Which observations distinguish endpoint limitations from a
+congested fabric path? Which details must be checked against the exact
+product and software release?
+
+#### Capstone — explain and validate one design
+
+Choose a reference topology from the suggested NVIDIA architecture readings.
+Create a one-page design brief containing:
+
+1. A topology diagram with compute, GPUs, BlueField where present, NICs,
+   switches, rails, storage, and management.
+2. A capacity calculation for a representative communication boundary,
+   stating port rates, number of links, oversubscription assumptions, and
+   failure case.
+3. One GPU-to-GPU flow trace for an intra-node path and one for an inter-node
+   RDMA path.
+4. One collective communication example and the network behavior it creates.
+5. A failure tree covering link loss, endpoint misconfiguration, partition or
+   policy mismatch, and congestion.
+6. A validation plan listing expected evidence, the tools or dashboards to
+   consult, and what each test cannot prove.
+
+Explain every diagram in your own words. If you cannot identify a component,
+boundary, or assumption in the source material, mark it as an open question
+instead of guessing.
 
 #### InfiniBand foundations and operations
 
