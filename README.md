@@ -11,6 +11,7 @@ questions as you study.
 ## Table of contents
 
 - [Study plan](#study-plan)
+- [Topology case studies and packet flows](#topology-case-studies-and-packet-flows)
 - [AI Data Center Design and Optimization — 5%](#1-ai-data-center-design-and-optimization--5)
 - [NVIDIA Spectrum Networking — 30%](#2-nvidia-spectrum-networking--30)
 - [NVIDIA InfiniBand Networking — 30%](#3-nvidia-infiniband-networking--30)
@@ -29,6 +30,177 @@ questions as you study.
 
 Mark a week complete as you finish it. Spend extra review time on the two
 30%-weight domains and revisit topics you find difficult.
+
+## Topology case studies and packet flows
+
+The examples below are illustrative learning scenarios, not prescriptive
+production designs. Real designs depend on the selected NVIDIA platform,
+software release, workload, scale, cabling, and validated deployment
+documentation. The official [NVIDIA NCP-AIN exam study guide](https://dam-cdn.nvd.orangelogic.com/AssetLink/32ljugfxg1hs1sd42371npw1xmcuo1yo.pdf)
+is the reference for the exam objectives; these explanations and diagrams are
+original study notes to help reason through those objectives.
+
+### Case study 1: two-tier leaf-spine AI fabric
+
+Imagine four GPU servers connected to two leaf switches, with both leaves
+connected to two spine switches. Each server has two network adapters, one on
+each of two independent rails. The diagram is simplified: production
+deployments may use many more ports, switches, rails, and failure domains.
+
+```text
+                       Spine 1       Spine 2
+                        /   \         /   \
+                       /     \       /     \
+                  Leaf A =====         ===== Leaf B
+                   /  \                       /  \
+              Server 1  Server 2         Server 3  Server 4
+                NIC0       NIC0             NIC0       NIC0  (rail 0)
+                NIC1       NIC1             NIC1       NIC1  (rail 1)
+```
+
+Each leaf has paths through both spines to the other leaf. In a balanced
+topology, equal-cost paths can share traffic; the actual distribution depends
+on the routing and hashing/adaptive-routing behavior configured on the
+platform. A second rail offers an additional traffic path only when the host,
+adapter, cabling, switch ports, routing, and application are all wired and
+configured to use it.
+
+**Capacity exercise:** suppose each of four servers offers 2 × 200 Gb/s of
+uplink capacity to the fabric. There are 1.6 Tb/s of server-facing capacity.
+If the two leaves provide 4 × 200 Gb/s of aggregate spine-facing links, there
+is also 1.6 Tb/s of nominal fabric-facing capacity at that boundary. This
+simple equality does not guarantee 1:1 application throughput: rail placement,
+oversubscription elsewhere, protocol overhead, hashing, congestion, and
+failure scenarios still matter. Recalculate for one failed uplink and explain
+which flows share the remaining capacity.
+
+**Questions to answer:** Where is the first oversubscribed cut? Does traffic
+between two servers attached to one leaf need to cross a spine? Which links
+are shared for cross-leaf traffic? What changes if one spine or one rail is
+unavailable? Which counters would confirm whether traffic is balanced?
+
+### Case study 2: trace an Ethernet RoCEv2 GPU transfer
+
+Trace a message from a GPU on Server 1 to a GPU on Server 3 in the topology
+above:
+
+1. The application and GPU communication library prepare an RDMA operation
+   and buffers. With a supported GPUDirect RDMA path, the adapter can transfer
+   payload to or from GPU memory without a CPU staging copy; setup and
+   completion still involve software.
+2. The host RDMA stack posts work to a queue pair. The NIC/SuperNIC constructs
+   RoCEv2 traffic, carried over UDP/IP inside Ethernet. The source adapter
+   chooses the relevant local port/rail and emits packets.
+3. The first switch classifies the packet according to the configured traffic
+   markings and maps it to a queue/priority. Switches forward using the
+   underlay Ethernet/IP information. Correct MTU, addressing, routing, and
+   consistent QoS mapping along the path are required.
+4. If queues build, ECN can mark congestion for an endpoint response. PFC may
+   pause a configured priority on a specific congested link where the fabric
+   design uses it. Neither mechanism repairs a bad route, an oversubscribed
+   topology, or a slow endpoint.
+5. Routing forwards the packet over an available path through a spine and the
+   destination leaf. Equal-cost or adaptive path behavior depends on the
+   switch platform and configuration.
+6. The destination NIC validates and processes the RDMA traffic and places
+   data into the registered destination memory region, potentially GPU memory
+   on a supported GPUDirect path. The RDMA completion and application-level
+   synchronization determine when the receiving GPU can consume the data.
+
+```text
+GPU 1 -> RDMA library/queue pair -> NIC 1
+      -> Leaf A -> Spine -> Leaf B -> NIC 3
+      -> destination memory/GPU 3 -> completion -> application
+```
+
+Keep the **control plane** distinct from this packet path: routing and fabric
+protocols establish state used to forward traffic, while individual data
+packets traverse the resulting forwarding path. For a slow transfer, compare
+host queue/counter data, per-port and per-queue switch utilization, ECN/PFC
+counters, drops, latency, and application progress in a common time window.
+
+### Case study 3: trace an InfiniBand RDMA operation
+
+Use the same two-server scenario, but attach the endpoints to an InfiniBand
+fabric. Before testing, verify active links, discovered HCAs/switches, a
+functioning Subnet Manager, expected addressing/path state, and compatible
+partition membership.
+
+```text
+GPU/application -> RDMA verbs + queue pair -> source HCA
+                -> IB switch path (LID/VL/PKey state)
+                -> destination HCA -> registered memory/GPU
+                -> completion queue -> application
+
+SM control/management: discovers and configures the fabric; it is not
+                       an extra per-packet hop in the data path.
+```
+
+The application posts work to the RDMA stack; the source HCA transmits over
+the selected physical port. Fabric forwarding follows the configured
+InfiniBand path. PKeys govern whether endpoints are permitted to exchange
+traffic in the relevant partition, while QoS/service-level and virtual-lane
+configuration affect traffic treatment. The destination HCA handles the
+operation and reports completion to the host. Exact path selection and
+features depend on the fabric and adapter configuration.
+
+If the operation fails, first distinguish link/discovery problems from
+partition/path problems and from performance issues. Check the source and
+destination HCA state, SM and fabric visibility, PKey membership, link errors,
+and then run a controlled reachability or performance test. A successful
+reachability probe does not establish expected bandwidth or application
+performance.
+
+### Case study 4: EVPN/VXLAN tenant packet flow
+
+Consider two hosts in the same tenant attached to different Ethernet leaves.
+Each leaf acts as a VTEP, and both endpoints belong to the same configured
+overlay segment/VNI. The routed underlay provides reachability between VTEP
+addresses; BGP EVPN distributes overlay endpoint reachability.
+
+```text
+Host A -- Leaf/VTEP A == routed IP underlay == Leaf/VTEP B -- Host B
+          |<------ same tenant overlay/VNI ------>|
+
+Inner frame:       Host A -> Host B (tenant traffic)
+Outer packet:      VTEP A -> VTEP B (underlay transport)
+Control plane:     BGP EVPN advertises overlay reachability
+```
+
+For a known remote endpoint, VTEP A encapsulates the tenant frame in an outer
+packet addressed to VTEP B. The underlay routes that outer packet, potentially
+across multiple equal-cost paths. VTEP B decapsulates it and forwards the
+original frame toward Host B. The underlay does not need to learn every
+tenant's inner MAC as a directly attached endpoint; the overlay control plane
+and VTEPs provide that mapping.
+
+If Host A cannot reach Host B, check in layers: local host attachment and
+VLAN/VNI mapping; BGP EVPN neighbor and route state; remote endpoint
+reachability; VTEP IP reachability in the underlay; and physical links,
+queues, and drops. For isolation failures, verify that tenants map to the
+intended distinct VNIs and that route import/export policy is correct.
+
+### Packet and traffic-flow review checklist
+
+For any flow scenario, sketch or write down:
+
+1. **Endpoints:** source/destination workload, GPU, host, and adapter.
+2. **Encapsulation:** protocol in use (for example, RoCEv2 over UDP/IP or an
+   InfiniBand transport); for overlays, record both inner and outer headers.
+3. **Forwarding state:** what control-plane state and addresses each hop uses.
+4. **Policy:** VLAN/VNI or PKey membership, QoS class, and applicable ACLs.
+5. **Path:** each port/switch, equal-cost path, rail, and shared bottleneck.
+6. **Congestion:** queue buildup, ECN marks, PFC pauses where applicable,
+   drops, and endpoint response.
+7. **Completion:** destination memory placement, transport completion, and
+   application consumption/synchronization.
+8. **Evidence:** exact counters, logs, timestamps, and tests that prove or
+   disprove each hypothesis.
+
+For collective traffic, repeat the trace for all participating ranks. Many
+flows can synchronize into bursts; the busiest link or slowest participant
+can determine collective completion time even if average fabric utilization
+appears moderate.
 
 ## 1. AI Data Center Design and Optimization — 5%
 
