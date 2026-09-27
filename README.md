@@ -21,6 +21,11 @@ questions as you study.
 
 ## Table of contents
 
+Each learning topic is organized around three questions: **What** is the
+concept or component? **Why** does it matter in an AI network? **How** is it
+used, verified, or troubleshot? Detailed explanations, examples, and exercises
+follow these summaries.
+
 | Chapter | Exam weight | Focus |
 | --- | ---: | --- |
 | [Study plan](#study-plan) | — | Six-week learning path |
@@ -37,6 +42,15 @@ questions as you study.
 
 ## Study plan
 
+**What:** A six-week sequence across the exam domains, with time weighted
+toward the larger networking sections.
+
+**Why:** A schedule helps balance broad concept learning, command/lab practice,
+and final review rather than leaving high-weight topics until the end.
+
+**How:** Follow the weekly sequence below, track weak objectives, and use
+timed practice in the final review period to decide what to revisit.
+
 - [ ] Week 1: AI data center foundations
 - [ ] Weeks 2–3: Spectrum networking; practice in NVIDIA Air where available
 - [ ] Week 4: InfiniBand networking
@@ -48,6 +62,15 @@ Mark a week complete as you finish it. Spend extra review time on the two
 
 ## Topology case studies and packet flows
 
+**What:** Worked examples of topology design and packet movement across
+Ethernet, InfiniBand, and overlay networks.
+
+**Why:** End-to-end flow tracing connects architecture concepts to
+troubleshooting and performance reasoning.
+
+**How:** Follow one example at a time, mark every endpoint and hop, and answer
+the failure and capacity questions using evidence.
+
 The examples below are illustrative learning scenarios, not prescriptive
 production designs. Real designs depend on the selected NVIDIA platform,
 software release, workload, scale, cabling, and validated deployment
@@ -56,6 +79,16 @@ is the reference for the exam objectives; these explanations and diagrams are
 original study notes to help reason through those objectives.
 
 ### Case study 1: two-tier leaf-spine AI fabric
+
+**What:** A small, redundant fabric where server-facing leaves connect through
+multiple spine paths.
+
+**Why:** It illustrates predictable paths between server blocks and provides
+a simple way to reason about capacity, oversubscription, and failures.
+
+**How:** Trace host-to-leaf-to-spine-to-leaf links, count link capacity at
+each boundary, then remove one link or switch and recalculate the available
+paths and bandwidth.
 
 Imagine four GPU servers connected to two leaf switches, with both leaves
 connected to two spine switches. Each server has two network adapters, one on
@@ -95,6 +128,15 @@ are shared for cross-leaf traffic? What changes if one spine or one rail is
 unavailable? Which counters would confirm whether traffic is balanced?
 
 ### Case study 2: trace an Ethernet RoCEv2 GPU transfer
+
+**What:** An RDMA data transfer between GPUs on different hosts over an
+Ethernet fabric using RoCEv2.
+
+**Why:** It connects host RDMA setup, packet encapsulation, switch forwarding,
+congestion handling, and GPU-memory placement into one end-to-end flow.
+
+**How:** Follow the numbered packet path below, then correlate endpoint
+completion with switch queue, ECN/PFC, drop, and link counters.
 
 Trace a message from a GPU on Server 1 to a GPU on Server 3 in the topology
 above:
@@ -136,6 +178,15 @@ counters, drops, latency, and application progress in a common time window.
 
 ### Case study 3: trace an InfiniBand RDMA operation
 
+**What:** An RDMA operation between InfiniBand endpoints, including host
+queue-pair setup and fabric forwarding.
+
+**Why:** It separates subnet management from the data path and shows how
+addressing, partition membership, and link state affect communication.
+
+**How:** Trace source QP/HCA to destination HCA/CQ; check SM discovery, path,
+PKey membership, and physical links when the operation fails.
+
 Use the same two-server scenario, but attach the endpoints to an InfiniBand
 fabric. Before testing, verify active links, discovered HCAs/switches, a
 functioning Subnet Manager, expected addressing/path state, and compatible
@@ -168,6 +219,15 @@ performance.
 
 ### Case study 4: EVPN/VXLAN tenant packet flow
 
+**What:** A tenant Ethernet frame encapsulated by one VTEP, routed across an
+IP underlay, then decapsulated by a remote VTEP.
+
+**Why:** It demonstrates how shared physical switching can provide isolated
+logical networks and why overlay and underlay faults must be distinguished.
+
+**How:** Trace the inner frame and outer packet separately; validate tenant
+VNI mapping, EVPN reachability, and VTEP-to-VTEP underlay connectivity.
+
 Consider two hosts in the same tenant attached to different Ethernet leaves.
 Each leaf acts as a VTEP, and both endpoints belong to the same configured
 overlay segment/VNI. The routed underlay provides reachability between VTEP
@@ -197,6 +257,15 @@ intended distinct VNIs and that route import/export policy is correct.
 
 ### Packet and traffic-flow review checklist
 
+**What:** A repeatable worksheet for describing a packet's endpoints,
+encapsulation, forwarding state, path, policy, congestion, and completion.
+
+**Why:** A layer-by-layer trace prevents confusing a control-plane issue with
+a data-path, endpoint, or application issue.
+
+**How:** Fill in each item below for one real or hypothetical flow and cite
+the counter, log, or test that supports each conclusion.
+
 For any flow scenario, sketch or write down:
 
 1. **Endpoints:** source/destination workload, GPU, host, and adapter.
@@ -219,7 +288,25 @@ appears moderate.
 
 ## 1. AI Data Center Design and Optimization — 5%
 
+**What:** The architecture and communication patterns of GPU-based AI
+infrastructure.
+
+**Why:** Network capacity and topology affect accelerator utilization and
+distributed job completion.
+
+**How:** Identify system components, map scale-up/scale-out paths, and reason
+about rails, collectives, and communication overhead.
+
 ### 1.1 Describe an AI factory networking architecture and its components
+
+**What:** The coordinated compute, scale-up, scale-out, storage, and
+management components that deliver AI training and inference.
+
+**Why:** Network or service bottlenecks can leave GPUs idle and reduce job
+throughput even when accelerator capacity is available.
+
+**How:** Diagram each component and traffic plane, mark their connections and
+boundaries, and explain the role and failure impact of every component.
 
 An AI factory is designed to turn data into trained or served models. Its
 compute, storage, power, cooling, and network capacity must be planned as one
@@ -249,6 +336,15 @@ infrastructure may carry more than one traffic type, but sharing it does not
 make the traffic's performance and isolation needs identical.
 
 ### Scalable units and leaf-spine design
+
+**What:** A scalable unit is a repeatable design building block; leaf-spine
+is a multi-path fabric connecting endpoint-facing leaves through spines.
+
+**Why:** Repeatable units simplify growth, while topology and link ratios
+determine path diversity, aggregate bandwidth, and potential bottlenecks.
+
+**How:** Identify what a reference design repeats, draw a leaf-spine path,
+and calculate offered downlink capacity versus uplink capacity.
 
 A scalable unit (SU) is a repeatable building block in a given reference
 architecture. Replicating a validated unit can simplify capacity planning,
@@ -281,6 +377,15 @@ simultaneously toward the rest of the fabric.
 
 ### 1.2 Describe rail-optimized topologies for high-performance AI workloads
 
+**What:** A topology that aligns corresponding GPU/NIC positions across
+servers into parallel network rails.
+
+**Why:** Independent rails can distribute collective traffic and reduce
+contention, provided they remain balanced and sufficiently independent.
+
+**How:** Map GPU-to-NIC-to-switch-to-uplink for every rail, then trace
+collectives and evaluate one-link and one-rail failures.
+
 In a rail-optimized GPU cluster, network paths are organized into parallel
 rails and GPU/NIC positions are connected consistently across servers. For
 example, traffic associated with GPU/NIC position 0 can use rail 0 across
@@ -307,6 +412,17 @@ scaling. Cabling, routing, congestion, and shared uplinks can still become
 bottlenecks.
 
 ### 1.3 Describe GPU-to-GPU communications
+
+**What:** Data movement between GPUs, either within a node over supported
+GPU interconnects or between nodes over an RDMA-capable network.
+
+**Why:** Distributed training depends on communication patterns such as
+all-reduce and all-to-all; a slow rank or congested path can delay all
+participants.
+
+**How:** Trace the complete path from source GPU through software, adapter,
+fabric, and destination GPU; account for topology, message pattern, completion,
+and synchronization.
 
 GPU-to-GPU communication can stay within one node or cross the scale-out
 network. The communication library/runtime and topology determine which
@@ -347,6 +463,16 @@ overlap.
 
 ### RDMA and GPUDirect concepts
 
+**What:** RDMA accesses registered remote memory with reduced CPU data-path
+involvement; GPUDirect RDMA can enable supported NIC-to-GPU-memory transfers.
+
+**Why:** These mechanisms can reduce copies and CPU overhead for large-scale
+GPU communication, but only on compatible, correctly configured systems.
+
+**How:** Verify hardware/software support, memory registration and permissions,
+adapter configuration, and that the workload actually uses the intended
+transfer path.
+
 Remote Direct Memory Access (RDMA) lets a registered memory region on one host
 be accessed by a remote peer with less CPU involvement than a conventional
 socket-copy data path. RDMA does not mean “no software”: memory registration,
@@ -366,7 +492,25 @@ RDMA improve CPU efficiency without eliminating configuration requirements?
 
 ## 2. NVIDIA Spectrum Networking — 30%
 
+**What:** Ethernet networking concepts and NVIDIA platform capabilities used
+to connect AI workloads, including RoCE, QoS, routing, and operations.
+
+**Why:** This high-weight domain tests how to configure, validate, and diagnose
+AI traffic across an Ethernet fabric.
+
+**How:** Trace the host-to-host path, validate configuration end to end, and
+correlate host and switch telemetry under representative load.
+
 ### Spectrum-X and RoCE configuration concepts
+
+**What:** RoCE carries RDMA traffic over Ethernet; Spectrum-X is NVIDIA's
+Ethernet platform for AI networking.
+
+**Why:** The endpoint RDMA stack and Ethernet fabric must work together for
+reachability, congestion handling, and predictable performance.
+
+**How:** Validate the host adapter/driver, addressing, routes, MTU, QoS, and
+congestion behavior end to end; test performance beyond basic IP reachability.
 
 RoCE (RDMA over Converged Ethernet) carries RDMA traffic over Ethernet. RoCEv2
 uses IP/UDP encapsulation, so normal Ethernet/IP reachability and the RDMA
@@ -387,6 +531,16 @@ that one switch feature alone guarantees performance. Be ready to diagnose
 asymmetric paths, mismatched MTUs, incorrect priorities, and congestion points.
 
 ### QoS, ECN, and PFC
+
+**What:** QoS classifies traffic, ECN marks congestion for endpoint reaction,
+and PFC pauses a selected priority on a link.
+
+**Why:** Consistent traffic treatment and carefully designed congestion
+response help protect latency-sensitive and RDMA flows under load.
+
+**How:** Inspect classification, queue mapping, ECN marks, PFC pause counters,
+drops, and endpoint response together; do not use PFC as a substitute for
+congestion control.
 
 Quality of Service (QoS) classifies traffic and maps it to queues or priorities.
 The mapping must be consistent across hosts and switches; otherwise traffic can
@@ -410,6 +564,16 @@ traffic characteristics.
 
 ### Adaptive routing and telemetry
 
+**What:** Adaptive routing can select among paths using fabric conditions;
+telemetry exposes utilization, congestion, latency, and events.
+
+**Why:** Static path hashing may imbalance synchronized AI flows, while
+telemetry helps distinguish fabric congestion from endpoint or application
+delays.
+
+**How:** Compare per-path and per-queue measurements on synchronized
+timestamps and confirm actual path selection and platform feature support.
+
 Equal-cost multipath (ECMP) commonly selects a path using flow attributes.
 Several large synchronized flows can hash onto the same path while other paths
 remain underused. Adaptive routing can select among available paths based on
@@ -424,6 +588,15 @@ chosen NVIDIA monitoring tools collect and display fabric state, and verify
 sampling intervals and time synchronization before correlating events.
 
 ### BGP EVPN, VTEPs, and VNIs
+
+**What:** EVPN distributes overlay reachability using BGP; VTEPs encapsulate
+and decapsulate VXLAN; VNIs identify overlay segments.
+
+**Why:** Together they enable tenant segmentation over a routed, shared
+underlay and provide control-plane endpoint learning.
+
+**How:** Verify underlay VTEP reachability, BGP EVPN routes and policy, VNI
+mapping, and host attachment; trace both inner and outer packet headers.
 
 VXLAN encapsulates an overlay Ethernet frame inside an IP/UDP packet to carry
 Layer 2 segments across a routed underlay. A VXLAN Tunnel Endpoint (VTEP)
@@ -447,6 +620,15 @@ remote host.
 
 ### NVIDIA Air
 
+**What:** A network simulation environment for supported NVIDIA networking
+topologies and configurations.
+
+**Why:** Simulation allows safe practice and configuration validation before
+changes are attempted on physical infrastructure.
+
+**How:** Build a supported lab, record topology and assumptions, test normal
+and failure cases, and separately validate physical behavior on real hardware.
+
 NVIDIA Air is a network simulation environment useful for learning and
 validating supported topologies and configurations without first changing a
 production fabric. Treat simulation results as evidence for the simulated
@@ -459,6 +641,15 @@ with your notes. Confirm current access and feature availability in NVIDIA's
 documentation.
 
 ### What Just Happened (WJH) and NetQ
+
+**What:** WJH helps investigate switch-level packet events; NetQ provides
+broader fabric operations and health visibility, depending on deployment.
+
+**Why:** One narrows a specific event while the other helps determine whether
+the condition spans devices or the wider fabric.
+
+**How:** Correlate timestamps, device/port/queue context, counters, and host
+symptoms; use both as evidence rather than assuming either alone is root cause.
 
 What Just Happened (WJH) helps investigate switch events such as packet drops
 and their reported causes. Use it to narrow a specific event to a port, reason,
@@ -474,6 +665,17 @@ use event-level switch evidence (WJH) versus fabric-wide context (NetQ); neither
 replaces checking endpoint drivers, application symptoms, and physical links.
 
 ### DOCA and SuperNIC
+
+**What:** DOCA is NVIDIA's software development framework for supported
+networking platforms; SuperNICs are high-performance adapters for demanding
+network workloads.
+
+**Why:** Software frameworks and adapter offloads affect how data-plane,
+RDMA, congestion, and telemetry functions are implemented.
+
+**How:** Identify the host/DPU component and product generation, verify
+version compatibility, and inspect supported offloads and operational state
+using current product documentation.
 
 DOCA is NVIDIA's software development framework for supported DPUs and
 networking platforms. It includes APIs, libraries, and tools; it is not a
@@ -494,7 +696,26 @@ first for a single switch drop versus a fabric-wide health question?
 
 ## 3. NVIDIA InfiniBand Networking — 30%
 
+**What:** InfiniBand fabric components and behavior, from subnet management
+and endpoint RDMA to partitioning, QoS, and monitoring.
+
+**Why:** This high-weight domain requires distinguishing fabric control,
+permissions, physical health, and data-path performance.
+
+**How:** Trace a QP operation across the fabric and validate SM state, HCA
+ports, PKeys, paths, and counters in layers.
+
 ### Fabric bring-up and Subnet Manager high availability
+
+**What:** Fabric initialization discovers endpoints and switches and uses a
+Subnet Manager (SM) to configure subnet state; high availability provides
+standby management capability.
+
+**Why:** InfiniBand depends on valid fabric discovery and path configuration,
+and an unavailable SM can prevent required management changes or recovery.
+
+**How:** Verify cabling and active links first, then SM master/standby state,
+discovered devices, addressing/path state, and controlled failover behavior.
 
 InfiniBand relies on a Subnet Manager (SM) to discover the fabric, assign
 identifiers and paths, and configure switches and endpoints. Before diagnosing
@@ -511,6 +732,16 @@ environment and verify the resulting fabric state rather than assuming that a
 standby is ready merely because its process is running.
 
 ### InfiniBand packet anatomy and end-to-end flow
+
+**What:** The RDMA operation path from application work request and QP, through
+the source HCA and fabric, to destination memory and completion queue.
+
+**Why:** It separates application setup, host transport, fabric forwarding,
+partition policy, and physical-link behavior for diagnosis.
+
+**How:** Trace endpoints, addressing, QP/transport, PKey, service
+level/virtual lane, switch path, destination operation, and completion. Keep
+SM configuration separate from per-packet forwarding.
 
 Separate the **control/management plane** from the **data path**. The Subnet
 Manager discovers the subnet and configures information such as identifiers
@@ -571,6 +802,15 @@ timestamps rather than inferring a cause from a single counter.
 
 ### Partition keys (PKeys)
 
+**What:** PKeys identify InfiniBand partition membership and constrain which
+ports may communicate under the configured membership rules.
+
+**Why:** Correct routing and link state cannot make a communication succeed
+when endpoint partition membership does not permit it.
+
+**How:** Compare PKey values and full/limited membership on both endpoints
+and verify the active fabric configuration before changing routes.
+
 PKeys provide partition-based access control for InfiniBand communication.
 Ports use PKey membership to determine which partition traffic they may
 exchange. Full and limited membership are different: in general, full members
@@ -586,6 +826,15 @@ before changing routing.
 
 ### QoS, virtual lanes, and adaptive routing
 
+**What:** InfiniBand QoS maps service levels to virtual lanes; adaptive routing
+selects among available paths based on supported fabric behavior.
+
+**Why:** Traffic classes may need separation, and alternate paths can help
+avoid congestion when the topology and configuration support them.
+
+**How:** Inspect effective SL-to-VL mapping, switch/SM capabilities, route
+state, and per-link evidence; verify there is a usable alternate path.
+
 InfiniBand QoS uses service levels and virtual lanes (VLs) to map traffic into
 separate link-level queues. VLs can help isolate traffic classes and avoid one
 blocked class holding up unrelated traffic, subject to correct configuration
@@ -599,6 +848,15 @@ every failure if the topology has no alternate path; confirm topology,
 supported features, and route state.
 
 ### Unified Fabric Manager (UFM)
+
+**What:** UFM is a fabric-management solution for supported InfiniBand
+deployments, with topology, health, and operational views.
+
+**Why:** It helps establish whether an incident is local or fabric-wide and
+where to focus physical or host-side investigation.
+
+**How:** Scope the event in UFM, inspect affected devices/links and counters,
+then corroborate with HCA state and targeted diagnostics at matching timestamps.
 
 UFM is NVIDIA's fabric management and monitoring solution for supported
 InfiniBand environments. Use it to view topology and device/link status,
@@ -617,7 +875,26 @@ evidence would you collect before replacing a cable or changing a partition?
 
 ## 4. Kubernetes Integration — 5%
 
+**What:** Kubernetes-managed NVIDIA networking components and the resources
+that make network devices available to workloads.
+
+**Why:** Distributed GPU workloads need the correct devices and network paths
+inside scheduled pods, not only healthy cluster services.
+
+**How:** Follow operator reconciliation from host prerequisites to node
+resources, pod interfaces, and an end-to-end communication test.
+
 ### NVIDIA Network Operator
+
+**What:** A Kubernetes operator that manages selected NVIDIA networking
+components on supported clusters.
+
+**Why:** It coordinates deployment and reconciliation of networking software
+and resources across nodes, reducing manual per-node setup.
+
+**How:** Follow the compatibility matrix and versioned install guide, configure
+the required components, then verify reconciliation, pods, node state, and
+events.
 
 The NVIDIA Network Operator manages networking components in Kubernetes
 clusters that use supported NVIDIA adapters and software. Depending on the
@@ -634,6 +911,17 @@ Kubernetes events as well.
 
 ### RDMA device plugins and network attachments
 
+**What:** Device plugins advertise hardware resources to the scheduler;
+network attachments connect pods to additional networks using supported CNI
+and RDMA components.
+
+**Why:** GPU workloads need the right node resource and network path, not only
+an ordinary pod interface.
+
+**How:** Trace adapter and driver to device plugin, node resource, pod request,
+attachment configuration, and pod-visible interface; test communication
+between workloads.
+
 Device plugins advertise supported hardware resources to the Kubernetes
 scheduler so workloads can request them. A network attachment definition and
 its CNI integration can connect a pod to an additional network; an RDMA-capable
@@ -648,6 +936,15 @@ on a node with the requested resource and a usable path to its peers.
 
 ### Deployment and verification
 
+**What:** A version-aware process for installing the operator/components and
+confirming the resulting Kubernetes and host network state.
+
+**Why:** A ready operator pod does not prove that a workload received a
+working RDMA-capable network path.
+
+**How:** Check component readiness, node allocatable resources, pod scheduling,
+interfaces/devices inside the workload, and a suitable end-to-end test.
+
 Use the official deployment guide for the matching Kubernetes and operator
 versions. Verify operator/controller health, component pod readiness on the
 expected nodes, node allocatable resources, successful pod scheduling, and
@@ -661,7 +958,26 @@ RDMA-capable path rather than only a normal network interface?
 
 ## 5. Troubleshooting Tools — 20%
 
+**What:** Host, switch, fabric, and benchmark tools used to investigate
+connectivity and performance symptoms.
+
+**Why:** Choosing a tool that measures the wrong layer can create false
+confidence or hide the actual failure domain.
+
+**How:** Scope the incident, select the narrowest useful check, correlate
+results and timestamps, and escalate from link state to end-to-end performance.
+
 ### A reliable troubleshooting sequence
+
+**What:** A scoped, evidence-driven sequence from symptom definition through
+physical/link, addressing, routing/policy, congestion, transport, and
+application checks.
+
+**Why:** Layered diagnosis reduces guesswork and avoids changing configuration
+before the failure domain is understood.
+
+**How:** Record endpoints, direction, timestamps, scope, and recent changes;
+test one hypothesis at a time and capture before/after evidence.
 
 Start by defining the symptom: affected workload, endpoints, direction,
 start time, frequency, and recent changes. Scope whether it is one host, one
@@ -677,6 +993,16 @@ with the installed tool's help and vendor documentation.
 
 ### Ethernet and switch diagnostics
 
+**What:** Switch-level tools and telemetry for investigating drops, resource
+limits, configuration state, and fabric-wide health.
+
+**Why:** Host symptoms alone may not reveal the switch port, queue, or hardware
+event responsible for an Ethernet/RoCE problem.
+
+**How:** Select WJH for event context, NetQ for broader fabric context, and
+`cl-resource-query` for supported switch resource questions; correlate with
+host and port counters.
+
 - **`cl-resource-query`:** inspect supported switch resource allocation and
   limits when a configuration or forwarding resource appears exhausted. Pair
   its output with the specific feature/configuration and switch logs; it is
@@ -688,6 +1014,16 @@ with the installed tool's help and vendor documentation.
   configuration, topology, or operational issues are isolated or widespread.
 
 ### InfiniBand discovery and link tools
+
+**What:** Host and fabric utilities that inspect HCA ports, discovered nodes,
+reachability, topology, and link details.
+
+**Why:** Different commands answer different questions; discovery, reachability,
+and physical health are not interchangeable proofs.
+
+**How:** Start with local `ibstat`, then use `ibnodes`, `ibping`,
+`iblinkinfo`, `ibdiagnet`, or UFM according to the symptom and operational
+scope.
 
 - **`ibstat`:** inspect local HCA and port state, including link properties
   reported by the installed stack. Start here when one host cannot join or use
@@ -708,6 +1044,16 @@ with the installed tool's help and vendor documentation.
 
 ### RDMA performance tools
 
+**What:** Perftest utilities such as `ib_write_bw` and `ib_write_lat` measure
+controlled RDMA bandwidth and latency between endpoints.
+
+**Why:** They help determine whether an RDMA path meets an expected baseline
+and narrow performance issues beyond simple reachability.
+
+**How:** Use compatible client/server options, record message size and other
+settings, run repeatable baselines, and compare like-for-like results while
+monitoring host and fabric counters.
+
 `ib_write_bw` and `ib_write_lat` are perftest utilities for measuring RDMA
 write bandwidth and latency between configured endpoints. Use matching
 software and compatible options on both sides, follow the tool's server/client
@@ -720,6 +1066,16 @@ both directions when relevant, and avoid treating one synthetic result as a
 guarantee of application performance.
 
 ### Symptom-to-tool decision practice
+
+**What:** A mapping from common symptoms to a first diagnostic check and
+evidence-driven follow-up.
+
+**Why:** It provides a disciplined starting point without assuming every
+symptom has the same root cause.
+
+**How:** Choose the row matching the observed scope, run the first checks, and
+select the next test from the evidence rather than blindly executing every
+tool.
 
 | Symptom | First checks | Follow-up |
 | --- | --- | --- |
@@ -739,7 +1095,26 @@ next branch for each result.
 
 ## 6. Automation and Configuration — 10%
 
+**What:** NVUE and Ansible methods for expressing, validating, and applying
+repeatable network configuration.
+
+**Why:** Automation reduces manual drift but can also amplify an incorrect
+change across many devices.
+
+**How:** Inspect desired and live state, validate changes on a canary, apply in
+controlled batches, verify outcomes, and keep a rollback path.
+
 ### NVUE configuration workflow and templates
+
+**What:** NVUE is a structured configuration and operational interface for
+supported Cumulus Linux systems; templates reuse configuration patterns.
+
+**Why:** Declarative, repeatable configuration can reduce drift while making
+changes easier to review across devices.
+
+**How:** Inspect current state, stage and validate intended changes, apply
+using the documented release workflow, then verify operational state and
+rollback readiness.
 
 NVIDIA User Experience (NVUE) provides a structured way to configure and
 inspect supported Cumulus Linux systems. Learn the distinction between
@@ -757,6 +1132,16 @@ prove that links or protocols reached the intended state.
 
 ### Ansible playbooks for network configuration
 
+**What:** Playbooks automate tasks against inventory targets using variables,
+tasks, modules/APIs, conditions, and handlers.
+
+**Why:** Automation improves repeatability and scale, but incorrect scope or
+non-idempotent tasks can multiply operational errors.
+
+**How:** Trace target hosts and variable values, validate with supported
+check/diff modes, test on a canary, and inspect both task output and resulting
+network state.
+
 Ansible automates repeatable tasks across an inventory. Understand the basic
 structure: inventory selects targets, variables supply values, tasks invoke
 modules or APIs, and handlers can respond to changes. A playbook expresses
@@ -769,6 +1154,15 @@ check mode/diff support, error behavior, and how partial failures are reported.
 Use a lab or staged rollout before applying network changes broadly.
 
 ### Safe rollout and verification
+
+**What:** A staged change process with explicit validation criteria and
+rollback conditions.
+
+**Why:** Network changes can affect many hosts at once; a canary limits impact
+and reveals unexpected behavior before wider deployment.
+
+**How:** Validate/render first, apply to a small batch, check control and data
+plane health against defined criteria, then expand or roll back.
 
 Separate rendering/validation from applying changes. Apply to a small canary
 set, inspect command/API output and device state, then expand in controlled
@@ -783,6 +1177,16 @@ would you verify after changing an NVUE template?
 
 ## Official resources
 
+**What:** The certification blueprint and vendor learning sources that define
+objectives, product behavior, and version-specific procedures.
+
+**Why:** The study guide is an aid, not a replacement for current official
+documentation or the exam's published scope.
+
+**How:** Use the certification guide to scope objectives, then consult the
+matching product/course documentation for details; note the version and access
+date for technical claims.
+
 - [NVIDIA NCP-AIN certification](https://www.nvidia.com/en-us/learn/certification/ai-networking-professional/)
 - [Official NVIDIA exam study guide (PDF)](https://dam-cdn.nvd.orangelogic.com/AssetLink/32ljugfxg1hs1sd42371npw1xmcuo1yo.pdf)
 - [InfiniBand Essentials](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139827)
@@ -791,6 +1195,15 @@ would you verify after changing an NVUE template?
 
 ### Suggested readings
 
+**What:** A topic-grouped collection of vendor courses, architecture
+references, technical articles, and broader networking documentation.
+
+**Why:** Reading across reference architectures, configuration guides, and
+performance explanations helps connect exam concepts to real systems.
+
+**How:** Follow the guided curriculum below, make your own notes, and verify
+version-sensitive claims against the official product documentation.
+
 These titles are a curated reading path to complement the chapter notes.
 Unless a link is provided, search the exact title on the named publisher's
 site; NVIDIA documentation and course pages may change URLs or require
@@ -798,12 +1211,30 @@ enrollment. Read the source for its full context and version applicability.
 
 ### Guided study curriculum
 
+**What:** A sequence of focused learning modules connecting the readings to
+explanations, design exercises, and practical validation.
+
+**Why:** Reading alone is not enough to demonstrate that you can explain a
+concept or apply it to an unfamiliar network scenario.
+
+**How:** Complete each module's study goal, read the listed sources, produce
+the requested artifact, and answer the review questions without notes.
+
 Use these modules to turn the reading list into an active study guide. The
 notes below are original explanations and study tasks, not summaries of
 paywalled or unprovided source text. Read the linked/vendor material for
 platform-specific details, then record your own diagrams and lab output.
 
 #### Module 1 — Map the AI factory
+
+**What:** The system architecture and roles of compute, GPU interconnects,
+BlueField, host adapters, switching, storage, and management.
+
+**Why:** Understanding component boundaries makes capacity, isolation, and
+failure analysis possible.
+
+**How:** Study the named architecture sources, draw the block diagram, and
+explain each connection and failure impact.
 
 **Study goal:** explain how compute, scale-up links, scale-out fabric,
 management, and storage fit together, and describe the role of each component.
@@ -840,6 +1271,15 @@ controls are documented?
 
 #### Module 2 — Reason about scalable units and rails
 
+**What:** Repeatable infrastructure building blocks and the mapping of
+GPU/network positions onto parallel rails.
+
+**Why:** Scaling or miswiring a unit can change capacity and create shared
+bottlenecks; rail alignment affects collective traffic distribution.
+
+**How:** Map endpoint-to-switch connectivity, calculate the narrowest capacity
+boundary, then evaluate the specified link/rail failure case.
+
 **Study goal:** explain how a repeatable AI infrastructure unit scales and
 how a rail-optimized topology distributes GPU traffic.
 
@@ -873,6 +1313,15 @@ domains, or do both rails share a component? What evidence validates the
 intended mapping?
 
 #### Module 3 — Follow GPU communication and collectives
+
+**What:** Intra-node and inter-node GPU transfers and collective operations
+such as all-reduce, all-gather, reduce-scatter, and all-to-all.
+
+**Why:** Communication schedules drive network traffic and synchronization;
+one straggling rank or congested path can slow a whole workload.
+
+**How:** Draw a collective's phases, trace an individual message end to end,
+and compare expected traffic with topology and telemetry.
 
 **Study goal:** distinguish intra-node GPU communication from inter-node
 communication and describe how collective patterns create network traffic.
@@ -908,6 +1357,15 @@ iteration time?
 
 #### Module 4 — Understand InfiniBand fabric operation
 
+**What:** Subnet management, endpoint RDMA operation, fabric forwarding,
+partition access, virtual lanes, and link flow control.
+
+**Why:** Separating these mechanisms lets you distinguish a physical fault
+from a discovery, addressing, permission, transport, or congestion issue.
+
+**How:** Trace an operation from QP/HCA to destination completion and verify
+each control and data-path layer in a lab or documented topology.
+
 **Study goal:** explain how endpoints join an InfiniBand subnet, how traffic
 is addressed and forwarded, and which controls affect reachability.
 
@@ -941,6 +1399,15 @@ membership? What does a successful reachability test prove—and not prove?
 
 #### Module 5 — Operate and troubleshoot host/fabric interfaces
 
+**What:** Host-side interface ownership/configuration and the evidence used to
+diagnose or safely change adapter and fabric state.
+
+**Why:** Host, adapter, switch, and manager views each expose different parts
+of the path; disruptive operations can affect active workloads.
+
+**How:** Capture baseline state, follow versioned documentation, use a
+controlled change plan, and compare post-change logs/counters and test results.
+
 **Study goal:** use host and fabric evidence together, and make safe operational
 changes.
 
@@ -972,6 +1439,15 @@ fabric manager? What is the impact of rebooting or resetting a BlueField or
 adapter in the topology you are studying?
 
 #### Module 6 — Compare InfiniBand and Spectrum-X Ethernet
+
+**What:** Two scale-out fabric approaches and their respective packet
+encapsulation, control, traffic treatment, congestion behavior, and diagnostics.
+
+**Why:** Selecting the right test or interpreting a symptom depends on which
+fabric mechanisms apply; similar symptoms can have different causes.
+
+**How:** Build the comparison table, trace one GPU flow through each fabric,
+and identify evidence at the endpoint, link, switch, and application layers.
 
 **Study goal:** trace both traffic types and explain their different
 congestion, control, and observability mechanisms.
@@ -1006,6 +1482,15 @@ product and software release?
 
 #### Capstone — explain and validate one design
 
+**What:** An integrated explanation of one reference topology, capacity
+assumptions, GPU traffic, failure behavior, and validation plan.
+
+**Why:** Real deployments combine components and failure domains; isolated
+definitions are not enough to reason about end-to-end behavior.
+
+**How:** Complete the six deliverables below, cite the source for design
+assumptions, and mark anything the source does not establish as an open question.
+
 Choose a reference topology from the suggested NVIDIA architecture readings.
 Create a one-page design brief containing:
 
@@ -1028,6 +1513,15 @@ instead of guessing.
 
 #### InfiniBand foundations and operations
 
+**What:** Learning sources for InfiniBand operation, host configuration,
+management modes, and troubleshooting.
+
+**Why:** They deepen understanding of the control plane, endpoint behavior,
+and operational checks beyond a high-level fabric diagram.
+
+**How:** Read the fundamentals first, then compare host-side and fabric-side
+procedures; record commands and expected state from the applicable release.
+
 - [InfiniBand Essentials | NVIDIA Academy](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139827)
 - Aurelien Degremont and Nathan Dauchy, LUG'24 (May 7–8, 2024)
 - Modes of Operation (NVIDIA Docs)
@@ -1036,6 +1530,15 @@ instead of guessing.
 - [InfiniBand Deep Dive (Udemy)](https://www.udemy.com/course/infiniband-deep-dive/learn/lecture/56215196#overview) — course access may require a Udemy account or enrollment. Add your own takeaways and lab observations after completing the lessons.
 
 #### AI factory architecture and NVIDIA systems
+
+**What:** Reference architectures and system descriptions for GPU-based
+clusters and AI infrastructure.
+
+**Why:** They show how compute, networking, storage, management, and power
+constraints are assembled in deployable systems.
+
+**How:** Sketch the architecture in layers and label traffic paths, scaling
+boundaries, and any assumptions the source leaves platform-specific.
 
 - NVIDIA DGX SuperPOD: AI Infrastructure for Enterprise Deployments
 - Key Components of the DGX SuperPOD (NVIDIA Docs)
@@ -1046,11 +1549,29 @@ instead of guessing.
 
 #### BlueField and host interfaces
 
+**What:** Product documentation about BlueField networking, administration,
+host interfaces, and lifecycle operations.
+
+**Why:** Interface ownership and operating mode affect the traffic path and
+the correct way to configure or troubleshoot a deployment.
+
+**How:** Identify product/software versions and operating mode first; use the
+matching guide to record interface state, change procedure, and verification.
+
 - BlueField-3 Administrator Quick-Start Guide (NVIDIA Docs)
 - NVIDIA BlueField Networking Platform
 - NVIDIA BlueField Reset and Reboot Procedure (NVIDIA Docs)
 
 #### GPU communication, collectives, and rails
+
+**What:** Learning sources about GPU interconnects, collective libraries,
+rail topology, and communication performance.
+
+**Why:** The communication algorithm and topology together determine which
+links carry traffic and where synchronization or imbalance can limit jobs.
+
+**How:** Draw collective phases across ranks, map ranks to GPUs/NICs/rails, and
+compare predicted traffic with documented validation or benchmark results.
 
 - Overview of NCCL (NCCL documentation)
 - Doubling all2all Performance With NVIDIA Collective Communication Library 2.12 (NVIDIA Technical Blog)
@@ -1059,6 +1580,16 @@ instead of guessing.
 - Rail-Optimised Networking: How NVIDIA Is Rethinking AI Network Design in the Data Centre (Vespertec)
 
 #### Spectrum-X and Ethernet fabrics
+
+**What:** NVIDIA Ethernet platform material and broader network operating
+system documentation.
+
+**Why:** These sources provide context for scale-out Ethernet, AI workload
+performance, and fabric operations.
+
+**How:** Separate platform-specific claims from general Ethernet concepts and
+verify supported features and commands for the exact hardware/software
+release.
 
 - NVIDIA Spectrum-X Whitepaper
 - Turbocharging Generative AI Workloads With NVIDIA Spectrum-X Networking Platform (NVIDIA Technical Blog)
