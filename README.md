@@ -789,9 +789,50 @@ would you verify after changing an NVUE template?
 - [InfiniBand Network Administration](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139854)
 - [Cumulus Linux Essentials](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139853)
 
-### Additional learning
+### Suggested readings
 
+These titles are a curated reading path to complement the chapter notes.
+Unless a link is provided, search the exact title on the named publisher's
+site; NVIDIA documentation and course pages may change URLs or require
+enrollment. Read the source for its full context and version applicability.
+
+#### InfiniBand foundations and operations
+
+- [InfiniBand Essentials | NVIDIA Academy](https://www.nvidia.com/en-us/training/academy/course-detail/?id=course%3A15139827)
+- Aurelien Degremont and Nathan Dauchy, LUG'24 (May 7–8, 2024)
+- Modes of Operation (NVIDIA Docs)
+- Host-Side Interface Configuration (NVIDIA Docs)
+- Logging (NVIDIA Docs)
 - [InfiniBand Deep Dive (Udemy)](https://www.udemy.com/course/infiniband-deep-dive/learn/lecture/56215196#overview) — course access may require a Udemy account or enrollment. Add your own takeaways and lab observations after completing the lessons.
+
+#### AI factory architecture and NVIDIA systems
+
+- NVIDIA DGX SuperPOD: AI Infrastructure for Enterprise Deployments
+- Key Components of the DGX SuperPOD (NVIDIA Docs)
+- NVIDIA DGX SuperPOD: Scalable Infrastructure for AI Leadership
+- NVIDIA GB200 NVL72 Delivers Trillion-Parameter LLM Training and Real-Time Inference (NVIDIA Technical Blog)
+- NVIDIA Unveils Reference Architecture for AI Cloud Providers (NVIDIA Blog)
+- Networking for Data Centers and the Era of AI (NVIDIA Technical Blog)
+
+#### BlueField and host interfaces
+
+- BlueField-3 Administrator Quick-Start Guide (NVIDIA Docs)
+- NVIDIA BlueField Networking Platform
+- NVIDIA BlueField Reset and Reboot Procedure (NVIDIA Docs)
+
+#### GPU communication, collectives, and rails
+
+- Overview of NCCL (NCCL documentation)
+- Doubling all2all Performance With NVIDIA Collective Communication Library 2.12 (NVIDIA Technical Blog)
+- NVIDIA NVLink and NVSwitch: Fastest HPC Data Center Platform
+- Rail-Optimized Topology Validation (NVIDIA Docs)
+- Rail-Optimised Networking: How NVIDIA Is Rethinking AI Network Design in the Data Centre (Vespertec)
+
+#### Spectrum-X and Ethernet fabrics
+
+- NVIDIA Spectrum-X Whitepaper
+- Turbocharging Generative AI Workloads With NVIDIA Spectrum-X Networking Platform (NVIDIA Technical Blog)
+- SONiC Wiki
 
 When adding notes, prefer your own explanations and cite external sources.
 Avoid committing credentials, exam questions, or materials you do not have
