@@ -1,3 +1,7 @@
+---
+description: Personal study guide and lab notes for the NVIDIA-Certified Professional AI Networking exam.
+---
+
 # NCP-AIN Study Notes
 
 Detailed personal study notes for the NVIDIA-Certified Professional: AI
@@ -5,20 +9,31 @@ Networking (NCP-AIN) exam. Use the explanations and exercises below as a
 starting point, then add your own diagrams, command output, lab results, and
 questions as you study.
 
+> [!NOTE]
 > Exam weights and objectives can change. Check the official NVIDIA resources
 > before using this outline to plan your final review.
 
+> **Reading this guide**
+> Use [`SUMMARY.md`](./SUMMARY.md) as the chapter index. Each domain below is
+> organized as a chapter with focused topics, practical exercises, and review
+> prompts. The guide is designed for study and lab practice, not as a
+> production deployment runbook.
+
 ## Table of contents
 
-- [Study plan](#study-plan)
-- [Topology case studies and packet flows](#topology-case-studies-and-packet-flows)
-- [AI Data Center Design and Optimization — 5%](#1-ai-data-center-design-and-optimization--5)
-- [NVIDIA Spectrum Networking — 30%](#2-nvidia-spectrum-networking--30)
-- [NVIDIA InfiniBand Networking — 30%](#3-nvidia-infiniband-networking--30)
-- [Kubernetes Integration — 5%](#4-kubernetes-integration--5)
-- [Troubleshooting Tools — 20%](#5-troubleshooting-tools--20)
-- [Automation and Configuration — 10%](#6-automation-and-configuration--10)
-- [Official resources](#official-resources)
+| Chapter | Exam weight | Focus |
+| --- | ---: | --- |
+| [Study plan](#study-plan) | — | Six-week learning path |
+| [Topology case studies and packet flows](#topology-case-studies-and-packet-flows) | — | Fabric designs and end-to-end traffic walkthroughs |
+| [AI Data Center Design and Optimization](#1-ai-data-center-design-and-optimization--5) | 5% | Architecture, rails, GPU communication |
+| [NVIDIA Spectrum Networking](#2-nvidia-spectrum-networking--30) | 30% | RoCE, QoS, routing, telemetry |
+| [NVIDIA InfiniBand Networking](#3-nvidia-infiniband-networking--30) | 30% | Fabric management, PKeys, QoS |
+| [Kubernetes Integration](#4-kubernetes-integration--5) | 5% | Operator, RDMA resources, validation |
+| [Troubleshooting Tools](#5-troubleshooting-tools--20) | 20% | Diagnostic tools and workflows |
+| [Automation and Configuration](#6-automation-and-configuration--10) | 10% | NVUE, Ansible, safe rollout |
+| [Official resources](#official-resources) | — | Vendor docs and courses |
+
+---
 
 ## Study plan
 
