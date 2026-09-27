@@ -1,0 +1,1238 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Structured study guide for NVIDIA-Certified Professional AI Networking">
+      
+      
+      
+        <link rel="canonical" href="https://ashhadhussain-git.github.io/NCP-AIN/chapter-2/">
+      
+      
+        <link rel="prev" href="../chapter-1/">
+      
+      
+        <link rel="next" href="../chapter-3/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>NVIDIA Spectrum Networking (30%) - NCP-AIN Detailed Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2-nvidia-spectrum-networking-30" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="NCP-AIN Detailed Study Guide" class="md-header__button md-logo" aria-label="NCP-AIN Detailed Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NCP-AIN Detailed Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              NVIDIA Spectrum Networking (30%)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ashhadhussain-git/NCP-AIN" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ashhadhussain-git/NCP-AIN
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="NCP-AIN Detailed Study Guide" class="md-nav__button md-logo" aria-label="NCP-AIN Detailed Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    NCP-AIN Detailed Study Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ashhadhussain-git/NCP-AIN" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ashhadhussain-git/NCP-AIN
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../study-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Study plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology case studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topology case studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Center Design (5%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Spectrum Networking (30%)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Spectrum Networking (30%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-configure-nvidia-spectrum-x-switches-for-roce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Configure NVIDIA Spectrum-X switches for RoCE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Configure NVIDIA Spectrum-X switches for RoCE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#roce-bring-up-and-validation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RoCE bring-up and validation workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarking-with-cloudai-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarking with CloudAI Benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-enable-and-verify-qos-ecn-pfc-and-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Enable and verify QoS, ECN, PFC, and advanced features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Enable and verify QoS, ECN, PFC, and advanced features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-routing-and-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive routing and telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-configure-multi-tenancy-with-bgp-evpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Configure multi-tenancy with BGP EVPN
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-use-nvidia-air-to-simulate-network-environments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Use NVIDIA Air to simulate network environments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-diagnose-congestion-or-packet-loss-with-in-band-telemetry-and-wjh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Diagnose congestion or packet loss with in-band telemetry and WJH
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-use-netq-for-real-time-network-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Use NetQ for real-time network monitoring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-install-nvidia-doca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Install NVIDIA DOCA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-configure-nvidia-supernic-functionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Configure NVIDIA SuperNIC functionality
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA InfiniBand Networking (30%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes Integration (5%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting Tools (20%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automation and Configuration (10%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Official resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Suggested readings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../curriculum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided study curriculum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#21-configure-nvidia-spectrum-x-switches-for-roce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Configure NVIDIA Spectrum-X switches for RoCE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 Configure NVIDIA Spectrum-X switches for RoCE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#roce-bring-up-and-validation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RoCE bring-up and validation workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarking-with-cloudai-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarking with CloudAI Benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-enable-and-verify-qos-ecn-pfc-and-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Enable and verify QoS, ECN, PFC, and advanced features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Enable and verify QoS, ECN, PFC, and advanced features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-routing-and-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive routing and telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-configure-multi-tenancy-with-bgp-evpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Configure multi-tenancy with BGP EVPN
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-use-nvidia-air-to-simulate-network-environments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Use NVIDIA Air to simulate network environments
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-diagnose-congestion-or-packet-loss-with-in-band-telemetry-and-wjh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Diagnose congestion or packet loss with in-band telemetry and WJH
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-use-netq-for-real-time-network-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Use NetQ for real-time network monitoring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-install-nvidia-doca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Install NVIDIA DOCA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-configure-nvidia-supernic-functionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Configure NVIDIA SuperNIC functionality
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="2-nvidia-spectrum-networking-30">2. NVIDIA Spectrum Networking — 30%<a class="headerlink" href="#2-nvidia-spectrum-networking-30" title="Permanent link">&para;</a></h1>
+<p><strong>What:</strong> Ethernet networking concepts and NVIDIA platform capabilities used
+to connect AI workloads, including RoCE, QoS, routing, and operations.</p>
+<p><strong>Why:</strong> This high-weight domain tests how to configure, validate, and diagnose
+AI traffic across an Ethernet fabric.</p>
+<p><strong>How:</strong> Trace the host-to-host path, validate configuration end to end, and
+correlate host and switch telemetry under representative load.</p>
+<h2 id="21-configure-nvidia-spectrum-x-switches-for-roce">2.1 Configure NVIDIA Spectrum-X switches for RoCE<a class="headerlink" href="#21-configure-nvidia-spectrum-x-switches-for-roce" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> RoCE carries RDMA traffic over Ethernet; Spectrum-X is NVIDIA's
+Ethernet platform for AI networking.</p>
+<p><strong>Why:</strong> The endpoint RDMA stack and Ethernet fabric must work together for
+reachability, congestion handling, and predictable performance.</p>
+<p><strong>How:</strong> Validate the host adapter/driver, addressing, routes, MTU, QoS, and
+congestion behavior end to end; test performance beyond basic IP reachability.</p>
+<p>RoCE (RDMA over Converged Ethernet) carries RDMA traffic over Ethernet. RoCEv2
+uses IP/UDP encapsulation, so normal Ethernet/IP reachability and the RDMA
+configuration both matter. A successful ping is not proof that RDMA is
+configured, and a working RDMA session is not proof that the fabric is
+performing well under load.</p>
+<p>Study the entire path: host adapter and driver, addressing and routing,
+switching, MTU consistency, traffic classification, congestion control, and
+the application’s RDMA settings. Establish a baseline with a single pair of
+hosts before adding scale or multiple traffic classes. Check product and
+software-version documentation for exact commands and supported features;
+switch syntax and defaults can vary.</p>
+<p>Spectrum-X is NVIDIA's Ethernet platform for AI workloads. Learn the roles of
+switches, adapters, and software as an end-to-end system rather than assuming
+that one switch feature alone guarantees performance. Be ready to diagnose
+asymmetric paths, mismatched MTUs, incorrect priorities, and congestion points.</p>
+<h3 id="roce-bring-up-and-validation-workflow">RoCE bring-up and validation workflow<a class="headerlink" href="#roce-bring-up-and-validation-workflow" title="Permanent link">&para;</a></h3>
+<p><strong>What:</strong> A staged process validates the switch, host adapter, and Ethernet/RDMA configuration as one end-to-end path.</p>
+<p><strong>Why:</strong> RoCE depends on compatible endpoint and fabric behavior; IP reachability alone does not establish RDMA operation or performance.</p>
+<p><strong>How:</strong> Confirm platform, firmware, driver, and software compatibility; verify physical links, addressing, routes, and end-to-end MTU; check host RDMA device and traffic-class settings; align switch QoS and congestion configuration; test one host pair before adding concurrent flows; record counters and a rollback plan before scaling changes. Use release-specific NVIDIA documentation for commands and supported features.</p>
+<h3 id="benchmarking-with-cloudai-benchmark">Benchmarking with CloudAI Benchmark<a class="headerlink" href="#benchmarking-with-cloudai-benchmark" title="Permanent link">&para;</a></h3>
+<p><strong>What:</strong> CloudAI Benchmark measures AI networking behavior under defined, supported test conditions.</p>
+<p><strong>Why:</strong> Link counters and basic point-to-point checks do not necessarily predict performance for an application's communication pattern or a multi-node workload.</p>
+<p><strong>How:</strong> Record topology, versions, workload, scale, and baseline; run supported tests and correlate throughput and latency with endpoint and switch telemetry. Compare like-for-like runs after changing one variable. Follow current documentation; a score alone is not a root-cause diagnosis.</p>
+<h2 id="22-enable-and-verify-qos-ecn-pfc-and-advanced-features">2.2 Enable and verify QoS, ECN, PFC, and advanced features<a class="headerlink" href="#22-enable-and-verify-qos-ecn-pfc-and-advanced-features" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> QoS classifies traffic, ECN marks congestion for endpoint reaction,
+and PFC pauses a selected priority on a link.</p>
+<p><strong>Why:</strong> Consistent traffic treatment and carefully designed congestion
+response help protect latency-sensitive and RDMA flows under load.</p>
+<p><strong>How:</strong> Inspect classification, queue mapping, ECN marks, PFC pause counters,
+drops, and endpoint response together; do not use PFC as a substitute for
+congestion control.</p>
+<p>Quality of Service (QoS) classifies traffic and maps it to queues or priorities.
+The mapping must be consistent across hosts and switches; otherwise traffic can
+enter the fabric in an unexpected class. Preserve capacity for control and
+management traffic so bulk data does not starve essential protocols.</p>
+<p>Explicit Congestion Notification (ECN) allows a congested queue to mark packets
+before it drops them. A capable receiver/adapter can react by reducing its
+sending rate. Priority Flow Control (PFC) pauses a selected priority on a link
+when buffers approach a threshold. PFC can limit loss locally, but poorly
+designed pause propagation can cause head-of-line blocking or congestion
+spreading. It is not a substitute for congestion control or correct buffer and
+queue design.</p>
+<p>Learn the intended sequence: classify the flow, observe queue buildup, signal
+congestion with ECN, and use PFC only as a carefully engineered safeguard where
+the design requires it. Validate priority-to-queue mappings, ECN thresholds,
+PFC counters, pause duration, drops, and end-host reaction together. Never copy
+thresholds from another deployment without checking platform guidance and
+traffic characteristics.</p>
+<h3 id="adaptive-routing-and-telemetry">Adaptive routing and telemetry<a class="headerlink" href="#adaptive-routing-and-telemetry" title="Permanent link">&para;</a></h3>
+<p><strong>What:</strong> Adaptive routing can select among paths using fabric conditions;
+telemetry exposes utilization, congestion, latency, and events.</p>
+<p><strong>Why:</strong> Static path hashing may imbalance synchronized AI flows, while
+telemetry helps distinguish fabric congestion from endpoint or application
+delays.</p>
+<p><strong>How:</strong> Compare per-path and per-queue measurements on synchronized
+timestamps and confirm actual path selection and platform feature support.</p>
+<p>Equal-cost multipath (ECMP) commonly selects a path using flow attributes.
+Several large synchronized flows can hash onto the same path while other paths
+remain underused. Adaptive routing can select among available paths based on
+current conditions, but actual behavior depends on platform support, topology,
+configuration, and flow type.</p>
+<p>Telemetry makes the behavior observable. Compare per-link and per-queue
+utilization, congestion marks, drops, latency, and retransmission or recovery
+indicators over the same time window. Distinguish a congested link from a
+slow endpoint or an application waiting on synchronization. Learn how the
+chosen NVIDIA monitoring tools collect and display fabric state, and verify
+sampling intervals and time synchronization before correlating events.</p>
+<h2 id="23-configure-multi-tenancy-with-bgp-evpn">2.3 Configure multi-tenancy with BGP EVPN<a class="headerlink" href="#23-configure-multi-tenancy-with-bgp-evpn" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> EVPN distributes overlay reachability using BGP; VTEPs encapsulate
+and decapsulate VXLAN; VNIs identify overlay segments.</p>
+<p><strong>Why:</strong> Together they enable tenant segmentation over a routed, shared
+underlay and provide control-plane endpoint learning.</p>
+<p><strong>How:</strong> Verify underlay VTEP reachability, BGP EVPN routes and policy, VNI
+mapping, and host attachment; trace both inner and outer packet headers.</p>
+<p>VXLAN encapsulates an overlay Ethernet frame inside an IP/UDP packet to carry
+Layer 2 segments across a routed underlay. A VXLAN Tunnel Endpoint (VTEP)
+encapsulates and decapsulates that traffic. A VXLAN Network Identifier (VNI)
+identifies an overlay segment. EVPN uses BGP to distribute reachability
+information so VTEPs can learn which remote endpoint is reachable through
+which tunnel.</p>
+<p>Keep the underlay and overlay separate in your mental model. The underlay must
+provide IP reachability between VTEP addresses; the overlay provides tenant
+connectivity. Trace a packet from a host through its local VTEP, across the
+underlay, and to the remote VTEP. Know where MAC/IP learning occurs, how a
+VNI maps to a tenant segment, and why route-target/import policy and correct
+addressing matter. For L3 services, study the applicable EVPN model and its
+control-plane routes from official documentation.</p>
+<p><strong>Practice:</strong> draw two tenants on shared switches, each with isolated VNIs.
+Explain how you would check VTEP reachability, BGP session state, route
+advertisement, VNI mapping, and host attachment when one tenant cannot reach a
+remote host.</p>
+<p><strong>Microsegmentation case study:</strong> Two tenants share the physical Ethernet fabric but must remain isolated. Verify the source access attachment maps to the intended VLAN/VNI and VRF, EVPN route-target policy imports only expected tenant routes, and ACL or service policy permits only the intended flows. Test both allowed same-tenant communication and denied cross-tenant communication. If isolation fails, inspect route learning, VNI/VRF mapping, VTEP reachability, policy counters, and both inner and outer packet headers; successful connectivity alone does not prove tenant separation.</p>
+<h2 id="24-use-nvidia-air-to-simulate-network-environments">2.4 Use NVIDIA Air to simulate network environments<a class="headerlink" href="#24-use-nvidia-air-to-simulate-network-environments" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> A network simulation environment for supported NVIDIA networking
+topologies and configurations.</p>
+<p><strong>Why:</strong> Simulation allows safe practice and configuration validation before
+changes are attempted on physical infrastructure.</p>
+<p><strong>How:</strong> Build a supported lab, record topology and assumptions, test normal
+and failure cases, and separately validate physical behavior on real hardware.</p>
+<p>NVIDIA Air is a network simulation environment useful for learning and
+validating supported topologies and configurations without first changing a
+production fabric. Treat simulation results as evidence for the simulated
+features only: it cannot prove physical cabling, optics, actual hardware
+capacity, or behavior of features not represented by the environment.</p>
+<p>Use a lab to practice configuration changes, expected state, and failure
+scenarios. Save the topology, assumptions, commands, and before/after output
+with your notes. Confirm current access and feature availability in NVIDIA's
+documentation.</p>
+<h2 id="25-diagnose-congestion-or-packet-loss-with-in-band-telemetry-and-wjh">2.5 Diagnose congestion or packet loss with in-band telemetry and WJH<a class="headerlink" href="#25-diagnose-congestion-or-packet-loss-with-in-band-telemetry-and-wjh" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> WJH helps investigate switch-level packet events; NetQ provides
+broader fabric operations and health visibility, depending on deployment.</p>
+<p><strong>Why:</strong> One narrows a specific event while the other helps determine whether
+the condition spans devices or the wider fabric.</p>
+<p><strong>How:</strong> Correlate timestamps, device/port/queue context, counters, and host
+symptoms; use both as evidence rather than assuming either alone is root cause.</p>
+<p>What Just Happened (WJH) helps investigate switch events such as packet drops
+and their reported causes. Use it to narrow a specific event to a port, reason,
+or relevant hardware context, then correlate its timestamp and counters with
+the host and other switches. A reported drop reason is a clue to validate, not
+by itself a complete end-to-end root cause.</p>
+<p>In-band telemetry, where supported and enabled, can expose path and queue observations for selected traffic. Correlate those records with WJH, switch counters, and host symptoms; check timestamps, sampling interval, and telemetry scope.</p>
+<h2 id="26-use-netq-for-real-time-network-monitoring">2.6 Use NetQ for real-time network monitoring<a class="headerlink" href="#26-use-netq-for-real-time-network-monitoring" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> NVIDIA NetQ provides fabric-wide operational visibility, including topology, health, and supported congestion or latency measurements depending on deployment and release.</p>
+<p><strong>Why:</strong> Fabric context helps determine whether a problem is isolated to a device or link, follows a path, or spans the wider network.</p>
+<p><strong>How:</strong> Confirm devices report to NetQ, inspect topology and health, then compare time-aligned latency, congestion, link, and event data for the affected path. Correlate findings with switch, WJH, telemetry, host RDMA, and workload evidence. Metrics vary by version; a dashboard alone does not prove root cause.</p>
+<p>NetQ provides broader fabric operations and visibility, including topology and
+health information depending on the deployed version and configuration. Use
+it to identify whether an issue is isolated or spans multiple devices, and to
+compare configuration or operational state across the fabric. Know when to
+use event-level switch evidence (WJH) versus fabric-wide context (NetQ); neither
+replaces checking endpoint drivers, application symptoms, and physical links.</p>
+<h2 id="27-install-nvidia-doca">2.7 Install NVIDIA DOCA<a class="headerlink" href="#27-install-nvidia-doca" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> DOCA is NVIDIA's software development framework for supported
+networking platforms; SuperNICs are high-performance adapters for demanding
+network workloads.</p>
+<p><strong>Why:</strong> Software frameworks and adapter offloads affect how data-plane,
+RDMA, congestion, and telemetry functions are implemented.</p>
+<p><strong>How:</strong> Identify the host/DPU component and product generation, verify
+version compatibility, and inspect supported offloads and operational state
+using current product documentation.</p>
+<p><strong>DOCA installation workflow:</strong> Identify the BlueField generation, operating mode, host OS, firmware, and required services. Select a supported DOCA release and follow its host- or DPU-side installation guide, including prerequisites and any documented reboot or firmware steps. Verify the installed version, device and driver state, required services, and the specific application or offload. Do not mix packages from incompatible releases or assume that installation enables every feature.</p>
+<p>DOCA is NVIDIA's software development framework for supported DPUs and
+networking platforms. It includes APIs, libraries, and tools; it is not a
+single switch command or a synonym for all networking software. Understand
+which host or DPU component runs a given service and which device/driver
+versions it requires.</p>
+<h2 id="28-configure-nvidia-supernic-functionality">2.8 Configure NVIDIA SuperNIC functionality<a class="headerlink" href="#28-configure-nvidia-supernic-functionality" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> NVIDIA SuperNICs provide high-performance host networking and, depending on product and software support, accelerated packet processing, RDMA, congestion management, and telemetry.</p>
+<p><strong>Why:</strong> Adapter offloads can improve data-path efficiency and cooperate with the Ethernet fabric to manage AI traffic at scale.</p>
+<p><strong>How:</strong> Verify adapter model, firmware, driver, link and RDMA state, then validate only the packet-processing and congestion features documented for that product and release. Compare a controlled baseline under representative load using adapter counters, switch queues, ECN/PFC statistics, and workload measurements.</p>
+<p>SuperNIC refers to high-performance adapters designed for demanding
+accelerated-computing network workloads. Depending on product and deployment,
+hardware and software can support packet processing, RDMA, congestion
+management, and telemetry. Learn the role of the adapter in the end-to-end
+data path and how to check link state, firmware/driver compatibility, and
+relevant offload configuration from current product documentation.</p>
+<p><strong>Review questions:</strong> Why is ping insufficient to verify RoCE? How do ECN and
+PFC differ? What does each of VTEP, VNI, and EVPN do? Which tool would you use
+first for a single switch drop versus a fabric-wide health question?</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

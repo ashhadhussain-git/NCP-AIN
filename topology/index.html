@@ -1,0 +1,1090 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Structured study guide for NVIDIA-Certified Professional AI Networking">
+      
+      
+      
+        <link rel="canonical" href="https://ashhadhussain-git.github.io/NCP-AIN/topology/">
+      
+      
+        <link rel="prev" href="../study-plan/">
+      
+      
+        <link rel="next" href="../chapter-1/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Overview - NCP-AIN Detailed Study Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#topology-case-studies-and-packet-flows" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="NCP-AIN Detailed Study Guide" class="md-header__button md-logo" aria-label="NCP-AIN Detailed Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NCP-AIN Detailed Study Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ashhadhussain-git/NCP-AIN" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ashhadhussain-git/NCP-AIN
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="NCP-AIN Detailed Study Guide" class="md-nav__button md-logo" aria-label="NCP-AIN Detailed Study Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    NCP-AIN Detailed Study Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ashhadhussain-git/NCP-AIN" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ashhadhussain-git/NCP-AIN
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../study-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Study plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology case studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Topology case studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-1-two-tier-leaf-spine-ai-fabric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 1: two-tier leaf-spine AI fabric
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-2-trace-an-ethernet-rocev2-gpu-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 2: trace an Ethernet RoCEv2 GPU transfer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-3-trace-an-infiniband-rdma-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 3: trace an InfiniBand RDMA operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-4-evpnvxlan-tenant-packet-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 4: EVPN/VXLAN tenant packet flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet-and-traffic-flow-review-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet and traffic-flow review checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Data Center Design (5%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Spectrum Networking (30%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA InfiniBand Networking (30%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes Integration (5%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting Tools (20%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automation and Configuration (10%)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Official resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Suggested readings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../curriculum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guided study curriculum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-1-two-tier-leaf-spine-ai-fabric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 1: two-tier leaf-spine AI fabric
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-2-trace-an-ethernet-rocev2-gpu-transfer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 2: trace an Ethernet RoCEv2 GPU transfer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-3-trace-an-infiniband-rdma-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 3: trace an InfiniBand RDMA operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#case-study-4-evpnvxlan-tenant-packet-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case study 4: EVPN/VXLAN tenant packet flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#packet-and-traffic-flow-review-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packet and traffic-flow review checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="topology-case-studies-and-packet-flows">Topology case studies and packet flows<a class="headerlink" href="#topology-case-studies-and-packet-flows" title="Permanent link">&para;</a></h1>
+<p><strong>What:</strong> Worked examples of topology design and packet movement across
+Ethernet, InfiniBand, and overlay networks.</p>
+<p><strong>Why:</strong> End-to-end flow tracing connects architecture concepts to
+troubleshooting and performance reasoning.</p>
+<p><strong>How:</strong> Follow one example at a time, mark every endpoint and hop, and answer
+the failure and capacity questions using evidence.</p>
+<p>The examples below are illustrative learning scenarios, not prescriptive
+production designs. Real designs depend on the selected NVIDIA platform,
+software release, workload, scale, cabling, and validated deployment
+documentation. The official <a href="https://dam-cdn.nvd.orangelogic.com/AssetLink/32ljugfxg1hs1sd42371npw1xmcuo1yo.pdf">NVIDIA NCP-AIN exam study guide</a>
+is the reference for the exam objectives; these explanations and diagrams are
+original study notes to help reason through those objectives.</p>
+<h2 id="case-study-1-two-tier-leaf-spine-ai-fabric">Case study 1: two-tier leaf-spine AI fabric<a class="headerlink" href="#case-study-1-two-tier-leaf-spine-ai-fabric" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> A small, redundant fabric where server-facing leaves connect through
+multiple spine paths.</p>
+<p><strong>Why:</strong> It illustrates predictable paths between server blocks and provides
+a simple way to reason about capacity, oversubscription, and failures.</p>
+<p><strong>How:</strong> Trace host-to-leaf-to-spine-to-leaf links, count link capacity at
+each boundary, then remove one link or switch and recalculate the available
+paths and bandwidth.</p>
+<p>Imagine four GPU servers connected to two leaf switches, with both leaves
+connected to two spine switches. Each server has two network adapters, one on
+each of two independent rails. The diagram is simplified: production
+deployments may use many more ports, switches, rails, and failure domains.</p>
+<pre><code class="language-text">                       Spine 1       Spine 2
+                        /   \         /   \
+                       /     \       /     \
+                  Leaf A =====         ===== Leaf B
+                   /  \                       /  \
+              Server 1  Server 2         Server 3  Server 4
+                NIC0       NIC0             NIC0       NIC0  (rail 0)
+                NIC1       NIC1             NIC1       NIC1  (rail 1)
+</code></pre>
+<p>Each leaf has paths through both spines to the other leaf. In a balanced
+topology, equal-cost paths can share traffic; the actual distribution depends
+on the routing and hashing/adaptive-routing behavior configured on the
+platform. A second rail offers an additional traffic path only when the host,
+adapter, cabling, switch ports, routing, and application are all wired and
+configured to use it.</p>
+<p><strong>Capacity exercise:</strong> suppose each of four servers offers 2 × 200 Gb/s of
+uplink capacity to the fabric. There are 1.6 Tb/s of server-facing capacity.
+If the two leaves provide 4 × 200 Gb/s of aggregate spine-facing links, there
+is also 1.6 Tb/s of nominal fabric-facing capacity at that boundary. This
+simple equality does not guarantee 1:1 application throughput: rail placement,
+oversubscription elsewhere, protocol overhead, hashing, congestion, and
+failure scenarios still matter. Recalculate for one failed uplink and explain
+which flows share the remaining capacity.</p>
+<p><strong>Questions to answer:</strong> Where is the first oversubscribed cut? Does traffic
+between two servers attached to one leaf need to cross a spine? Which links
+are shared for cross-leaf traffic? What changes if one spine or one rail is
+unavailable? Which counters would confirm whether traffic is balanced?</p>
+<h2 id="case-study-2-trace-an-ethernet-rocev2-gpu-transfer">Case study 2: trace an Ethernet RoCEv2 GPU transfer<a class="headerlink" href="#case-study-2-trace-an-ethernet-rocev2-gpu-transfer" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> An RDMA data transfer between GPUs on different hosts over an
+Ethernet fabric using RoCEv2.</p>
+<p><strong>Why:</strong> It connects host RDMA setup, packet encapsulation, switch forwarding,
+congestion handling, and GPU-memory placement into one end-to-end flow.</p>
+<p><strong>How:</strong> Follow the numbered packet path below, then correlate endpoint
+completion with switch queue, ECN/PFC, drop, and link counters.</p>
+<p>Trace a message from a GPU on Server 1 to a GPU on Server 3 in the topology
+above:</p>
+<ol>
+<li>The application and GPU communication library prepare an RDMA operation
+   and buffers. With a supported GPUDirect RDMA path, the adapter can transfer
+   payload to or from GPU memory without a CPU staging copy; setup and
+   completion still involve software.</li>
+<li>The host RDMA stack posts work to a queue pair. The NIC/SuperNIC constructs
+   RoCEv2 traffic, carried over UDP/IP inside Ethernet. The source adapter
+   chooses the relevant local port/rail and emits packets.</li>
+<li>The first switch classifies the packet according to the configured traffic
+   markings and maps it to a queue/priority. Switches forward using the
+   underlay Ethernet/IP information. Correct MTU, addressing, routing, and
+   consistent QoS mapping along the path are required.</li>
+<li>If queues build, ECN can mark congestion for an endpoint response. PFC may
+   pause a configured priority on a specific congested link where the fabric
+   design uses it. Neither mechanism repairs a bad route, an oversubscribed
+   topology, or a slow endpoint.</li>
+<li>Routing forwards the packet over an available path through a spine and the
+   destination leaf. Equal-cost or adaptive path behavior depends on the
+   switch platform and configuration.</li>
+<li>The destination NIC validates and processes the RDMA traffic and places
+   data into the registered destination memory region, potentially GPU memory
+   on a supported GPUDirect path. The RDMA completion and application-level
+   synchronization determine when the receiving GPU can consume the data.</li>
+</ol>
+<pre><code class="language-text">GPU 1 -&gt; RDMA library/queue pair -&gt; NIC 1
+      -&gt; Leaf A -&gt; Spine -&gt; Leaf B -&gt; NIC 3
+      -&gt; destination memory/GPU 3 -&gt; completion -&gt; application
+</code></pre>
+<p>Keep the <strong>control plane</strong> distinct from this packet path: routing and fabric
+protocols establish state used to forward traffic, while individual data
+packets traverse the resulting forwarding path. For a slow transfer, compare
+host queue/counter data, per-port and per-queue switch utilization, ECN/PFC
+counters, drops, latency, and application progress in a common time window.</p>
+<h2 id="case-study-3-trace-an-infiniband-rdma-operation">Case study 3: trace an InfiniBand RDMA operation<a class="headerlink" href="#case-study-3-trace-an-infiniband-rdma-operation" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> An RDMA operation between InfiniBand endpoints, including host
+queue-pair setup and fabric forwarding.</p>
+<p><strong>Why:</strong> It separates subnet management from the data path and shows how
+addressing, partition membership, and link state affect communication.</p>
+<p><strong>How:</strong> Trace source QP/HCA to destination HCA/CQ; check SM discovery, path,
+PKey membership, and physical links when the operation fails.</p>
+<p>Use the same two-server scenario, but attach the endpoints to an InfiniBand
+fabric. Before testing, verify active links, discovered HCAs/switches, a
+functioning Subnet Manager, expected addressing/path state, and compatible
+partition membership.</p>
+<pre><code class="language-text">GPU/application -&gt; RDMA verbs + queue pair -&gt; source HCA
+                -&gt; IB switch path (LID/VL/PKey state)
+                -&gt; destination HCA -&gt; registered memory/GPU
+                -&gt; completion queue -&gt; application
+
+SM control/management: discovers and configures the fabric; it is not
+                       an extra per-packet hop in the data path.
+</code></pre>
+<p>The application posts work to the RDMA stack; the source HCA transmits over
+the selected physical port. Fabric forwarding follows the configured
+InfiniBand path. PKeys govern whether endpoints are permitted to exchange
+traffic in the relevant partition, while QoS/service-level and virtual-lane
+configuration affect traffic treatment. The destination HCA handles the
+operation and reports completion to the host. Exact path selection and
+features depend on the fabric and adapter configuration.</p>
+<p>If the operation fails, first distinguish link/discovery problems from
+partition/path problems and from performance issues. Check the source and
+destination HCA state, SM and fabric visibility, PKey membership, link errors,
+and then run a controlled reachability or performance test. A successful
+reachability probe does not establish expected bandwidth or application
+performance.</p>
+<h2 id="case-study-4-evpnvxlan-tenant-packet-flow">Case study 4: EVPN/VXLAN tenant packet flow<a class="headerlink" href="#case-study-4-evpnvxlan-tenant-packet-flow" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> A tenant Ethernet frame encapsulated by one VTEP, routed across an
+IP underlay, then decapsulated by a remote VTEP.</p>
+<p><strong>Why:</strong> It demonstrates how shared physical switching can provide isolated
+logical networks and why overlay and underlay faults must be distinguished.</p>
+<p><strong>How:</strong> Trace the inner frame and outer packet separately; validate tenant
+VNI mapping, EVPN reachability, and VTEP-to-VTEP underlay connectivity.</p>
+<p>Consider two hosts in the same tenant attached to different Ethernet leaves.
+Each leaf acts as a VTEP, and both endpoints belong to the same configured
+overlay segment/VNI. The routed underlay provides reachability between VTEP
+addresses; BGP EVPN distributes overlay endpoint reachability.</p>
+<pre><code class="language-text">Host A -- Leaf/VTEP A == routed IP underlay == Leaf/VTEP B -- Host B
+          |&lt;------ same tenant overlay/VNI ------&gt;|
+
+Inner frame:       Host A -&gt; Host B (tenant traffic)
+Outer packet:      VTEP A -&gt; VTEP B (underlay transport)
+Control plane:     BGP EVPN advertises overlay reachability
+</code></pre>
+<p>For a known remote endpoint, VTEP A encapsulates the tenant frame in an outer
+packet addressed to VTEP B. The underlay routes that outer packet, potentially
+across multiple equal-cost paths. VTEP B decapsulates it and forwards the
+original frame toward Host B. The underlay does not need to learn every
+tenant's inner MAC as a directly attached endpoint; the overlay control plane
+and VTEPs provide that mapping.</p>
+<p>If Host A cannot reach Host B, check in layers: local host attachment and
+VLAN/VNI mapping; BGP EVPN neighbor and route state; remote endpoint
+reachability; VTEP IP reachability in the underlay; and physical links,
+queues, and drops. For isolation failures, verify that tenants map to the
+intended distinct VNIs and that route import/export policy is correct.</p>
+<h2 id="packet-and-traffic-flow-review-checklist">Packet and traffic-flow review checklist<a class="headerlink" href="#packet-and-traffic-flow-review-checklist" title="Permanent link">&para;</a></h2>
+<p><strong>What:</strong> A repeatable worksheet for describing a packet's endpoints,
+encapsulation, forwarding state, path, policy, congestion, and completion.</p>
+<p><strong>Why:</strong> A layer-by-layer trace prevents confusing a control-plane issue with
+a data-path, endpoint, or application issue.</p>
+<p><strong>How:</strong> Fill in each item below for one real or hypothetical flow and cite
+the counter, log, or test that supports each conclusion.</p>
+<p>For any flow scenario, sketch or write down:</p>
+<ol>
+<li><strong>Endpoints:</strong> source/destination workload, GPU, host, and adapter.</li>
+<li><strong>Encapsulation:</strong> protocol in use (for example, RoCEv2 over UDP/IP or an
+   InfiniBand transport); for overlays, record both inner and outer headers.</li>
+<li><strong>Forwarding state:</strong> what control-plane state and addresses each hop uses.</li>
+<li><strong>Policy:</strong> VLAN/VNI or PKey membership, QoS class, and applicable ACLs.</li>
+<li><strong>Path:</strong> each port/switch, equal-cost path, rail, and shared bottleneck.</li>
+<li><strong>Congestion:</strong> queue buildup, ECN marks, PFC pauses where applicable,
+   drops, and endpoint response.</li>
+<li><strong>Completion:</strong> destination memory placement, transport completion, and
+   application consumption/synchronization.</li>
+<li><strong>Evidence:</strong> exact counters, logs, timestamps, and tests that prove or
+   disprove each hypothesis.</li>
+</ol>
+<p>For collective traffic, repeat the trace for all participating ranks. Many
+flows can synchronize into bursts; the busiest link or slowest participant
+can determine collective completion time even if average fabric utilization
+appears moderate.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
