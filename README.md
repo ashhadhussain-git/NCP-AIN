@@ -219,40 +219,42 @@ appears moderate.
 
 ## 1. AI Data Center Design and Optimization — 5%
 
-### AI factory architecture and components
+### 1.1 Describe an AI factory networking architecture and its components
 
 An AI factory is designed to turn data into trained or served models. Its
 compute, storage, power, cooling, and network capacity must be planned as one
 system. Large GPU jobs create many synchronized flows; a slow or oversubscribed
 network can leave expensive accelerators waiting instead of computing.
 
-Know the function and failure impact of the main building blocks:
+Think of the architecture as several cooperating planes rather than one
+undifferentiated network:
 
-- **GPU and GPU server:** perform accelerated computation and host one or more
-  network adapters.
-- **NVLink/NVSwitch:** provide high-bandwidth communication among GPUs within
-  a server or supported system. They do not replace the inter-server fabric.
-- **NIC/SuperNIC:** connects a host to an Ethernet fabric and may offload
-  networking and congestion-related work.
-- **DPU:** a programmable data-processing unit that can offload infrastructure
-  services such as networking, security, or storage from the host CPU.
-- **Leaf and spine switches:** form the scalable switching fabric connecting
-  hosts and, at higher tiers, leaf switches.
-- **Storage and management networks:** serve different traffic and operational
-  needs from the GPU data path; understand their purpose and isolation.
+| Component | Role in the AI factory | Networking perspective |
+| --- | --- | --- |
+| GPU and compute node | Execute model training or inference; nodes may contain multiple GPUs | Exchanges data within the node and with remote nodes; GPU count alone does not determine network bandwidth |
+| NVLink and NVSwitch | Connect GPUs within supported systems | Provide high-bandwidth scale-up communication; distinct from the data-center scale-out fabric |
+| NIC / SuperNIC | Connect a host to an Ethernet network and support data movement | Provides host-facing ports and, depending on platform, RDMA and hardware offloads |
+| NVIDIA BlueField DPU | Programmable data-processing unit with Arm compute and networking interfaces | Can accelerate or isolate infrastructure services such as networking, security, and storage; exact functions depend on the BlueField generation and deployed software |
+| Leaf switches | Attach servers and provide access into the fabric | Aggregate host links and connect to spine or higher-tier switches |
+| Spine switches | Interconnect leaf blocks in a scalable fabric | Provide paths between leaves; count, port speed, and topology determine available aggregate capacity |
+| Scalable unit (SU) | Repeatable building block used to grow an AI factory | Treat its exact contents and scale as design-specific; identify its compute, switch, cabling, and inter-unit boundaries from the reference architecture |
+| Storage network | Connects compute to training datasets, checkpoints, and other storage services | Capacity and path design affect data loading and checkpoint traffic; may share or use separate infrastructure depending on the architecture |
+| Management / service network | Supports provisioning, monitoring, and operations | Carries control and operational traffic and should be understood separately from GPU payload traffic |
 
-When estimating capacity, distinguish link rate from usable application
-throughput. Account for the number of endpoints, uplink capacity, path count,
-oversubscription, protocol overhead, and whether all nodes communicate at once.
-Power, cooling, cabling distance, and rack density constrain which theoretical
-topology can actually be deployed.
+The **scale-up domain** connects components within a server or tightly coupled
+system, commonly using GPU interconnects. The **scale-out domain** connects
+servers across the data-center fabric using Ethernet/RoCE or InfiniBand.
+Storage and management traffic have their own requirements. One physical
+infrastructure may carry more than one traffic type, but sharing it does not
+make the traffic's performance and isolation needs identical.
 
 ### Scalable units and leaf-spine design
 
-A scalable unit (SU) is a repeatable building block of compute and networking.
-Replicating a known-good unit simplifies capacity planning, cabling, validation,
-and fault isolation. Be able to explain what grows when another unit is added
-and which inter-unit links or services could become bottlenecks.
+A scalable unit (SU) is a repeatable building block in a given reference
+architecture. Replicating a validated unit can simplify capacity planning,
+cabling, deployment, and fault isolation. Do not assume every design uses the
+same SU definition: identify which compute, network, storage, and service
+components it contains, and which links connect it to other units.
 
 In a basic leaf-spine fabric, each host attaches to a leaf, and each leaf
 connects to every spine. Paths between hosts in different leaf blocks usually
@@ -260,40 +262,88 @@ have a predictable number of switch hops. Multiple equal-cost paths can provide
 aggregate capacity and resilience, provided routing and link utilization are
 working as intended.
 
+```text
+Compute / GPU nodes              Fabric
+  Node A ---- Leaf A ===== Spine 1 ===== Leaf B ---- Node C
+  Node B ----   |   ===== Spine 2 =====   |   ---- Node D
+                |                          |
+            local hosts                 local hosts
+
+The double lines represent multiple links in a simplified drawing.
+Actual link count, speed, and topology are design-specific.
+```
+
 Draw a small topology and trace traffic between two hosts on one leaf and on
 different leaves. Identify the links shared by many flows. Calculate a simple
 oversubscription ratio as total offered downlink bandwidth divided by total
 uplink bandwidth; a ratio above 1 means not all host ports can run at line rate
 simultaneously toward the rest of the fabric.
 
-### Rail-optimized topologies
+### 1.2 Describe rail-optimized topologies for high-performance AI workloads
 
-In a rail-optimized GPU cluster, matching GPU positions across servers connect
-through corresponding network rails. For example, GPU/NIC position 0 in each
-server uses rail 0, while position 1 uses rail 1. This gives collective
-communication patterns more independent paths and can reduce contention
-between unrelated GPU flows.
+In a rail-optimized GPU cluster, network paths are organized into parallel
+rails and GPU/NIC positions are connected consistently across servers. For
+example, traffic associated with GPU/NIC position 0 can use rail 0 across
+nodes, while position 1 uses rail 1. This can give distributed GPU collectives
+multiple parallel paths and limit competition between traffic assigned to
+different rails.
 
-Understand the topology, not just the label: map each GPU to its local NIC,
-switch port, leaf, and uplink. Then follow an all-reduce or all-to-all exchange
-across several nodes. Explain how multiple rails provide parallelism, and what
-happens to bandwidth or resiliency if one rail or a link fails. A rail design
-still depends on correct cabling, routing, balanced traffic, and enough
-end-to-end capacity.
+```text
+                Rail 0                         Rail 1
+Node A: GPU 0 -> NIC 0 -> Leaf A0       GPU 1 -> NIC 1 -> Leaf A1
+Node B: GPU 0 -> NIC 0 -> Leaf B0       GPU 1 -> NIC 1 -> Leaf B1
+                         \  spine paths  /                \ spine paths /
 
-### Intra-node vs. inter-node GPU communication
+Illustrative only: real GPU/NIC counts and rail-to-switch mappings vary.
+```
 
-Within a server, GPUs can exchange data over NVLink/NVSwitch when the platform
-supports it. Between servers, data traverses a network adapter and the
-Ethernet/RoCE or InfiniBand fabric. The two paths have different hardware,
-failure modes, and observability; a healthy inter-node fabric does not prove
-intra-node GPU links are healthy, or vice versa.
+Rails provide useful parallelism only when the end-to-end mapping is correct:
+GPU-to-NIC affinity, adapter ports, switch connectivity, routing, and
+application/library behavior must agree. Map each GPU to its local NIC, switch
+port, leaf, and uplink. Then trace a collective across multiple nodes. If one
+rail is unavailable, determine whether traffic fails over, loses capacity, or
+becomes imbalanced; do not assume automatic failover or linear bandwidth
+scaling. Cabling, routing, congestion, and shared uplinks can still become
+bottlenecks.
 
-Trace an application transfer in both cases. For inter-node traffic identify
-the GPU, host software, adapter, fabric path, remote adapter, and destination
-GPU. Consider how collective operations synchronize many of these transfers:
-incast, synchronized bursts, or an imbalanced path can affect job completion
-time even when average link utilization looks acceptable.
+### 1.3 Describe GPU-to-GPU communications
+
+GPU-to-GPU communication can stay within one node or cross the scale-out
+network. The communication library/runtime and topology determine which
+available paths are used; an application-level “GPU-to-GPU” operation is not
+necessarily a single direct physical link.
+
+| Communication scope | Typical path | What to understand |
+| --- | --- | --- |
+| Within a node | GPU ↔ NVLink/NVSwitch ↔ GPU, where supported | Link topology and bandwidth differ by platform; identify local GPU connectivity and its failure/monitoring domain |
+| Across nodes | GPU ↔ host communication stack / RDMA ↔ NIC ↔ Ethernet/RoCE or InfiniBand fabric ↔ remote NIC ↔ GPU | The complete path includes host software, adapter, network topology, congestion behavior, and destination placement |
+| To/from storage | GPU/node ↔ host and storage software ↔ storage network/service | Data staging, storage throughput, and checkpointing can compete with or be separate from GPU collective traffic |
+
+Collective communication patterns explain why AI workloads can stress a
+network differently from independent request/response flows:
+
+- **All-reduce:** ranks contribute values and receive a reduced result.
+  Training frameworks commonly use it to aggregate gradients. The algorithm
+  may form rings, trees, or other schedules; each has different traffic and
+  sensitivity to topology.
+- **All-gather / reduce-scatter:** move or reduce different portions of data
+  across ranks and are often combined to implement larger collectives.
+- **All-to-all:** each rank exchanges data with many or all other ranks. It can
+  create many simultaneous flows and expose oversubscription or path imbalance.
+
+For an inter-node transfer, trace the sending GPU, communication library,
+RDMA operation and buffers, local NIC, fabric path, remote NIC, destination
+memory/GPU, and completion/synchronization. With supported GPUDirect RDMA,
+payload can move between adapter and GPU memory without a CPU staging copy;
+the supported hardware/software stack and correct configuration are required.
+RDMA reduces CPU data-path work but still requires setup, permissions, and
+software coordination.
+
+Collectives often synchronize participants. A slow rank, congested rail, or
+imbalanced path may delay completion for the whole operation. Thus, aggregate
+link speed alone is not a performance guarantee: consider topology, number of
+active flows, message size, congestion, endpoint behavior, and application
+overlap.
 
 ### RDMA and GPUDirect concepts
 
