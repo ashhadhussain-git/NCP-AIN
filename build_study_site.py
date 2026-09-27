@@ -61,7 +61,11 @@ def main():
         if closing is None:
             raise ValueError("README.md has an unterminated front matter block")
         intro = intro[closing + 1:]
-    intro = [line for line in intro if line.strip() != "# NCP-AIN Detailed Study Guide"]
+    intro = [
+        line.replace("[`SUMMARY.md`](./SUMMARY.md)", "[chapter navigation](#chapters)")
+        for line in intro
+        if line.strip() != "# NCP-AIN Detailed Study Guide"
+    ]
     intro.extend(
         [
             "",
