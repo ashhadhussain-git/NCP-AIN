@@ -9,6 +9,8 @@ Networking (NCP-AIN) exam. Use the explanations and exercises below as a
 starting point, then add your own diagrams, command output, lab results, and
 questions as you study.
 
+**Interactive study site:** [Open the chapter navigation and section outline](https://ashhadhussain-git.github.io/NCP-AIN/).
+
 > [!NOTE]
 > Exam weights and objectives can change. Check the official NVIDIA resources
 > before using this outline to plan your final review.

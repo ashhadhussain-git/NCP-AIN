@@ -1,5 +1,6 @@
 # NCP-AIN Detailed Study Guide
 
+* [Open interactive study site](https://ashhadhussain-git.github.io/NCP-AIN/)
 * [Start here — Overview and study plan](README.md#study-plan)
 * [Topology case studies and packet flows](README.md#topology-case-studies-and-packet-flows)
   * [Leaf-spine AI fabric](README.md#case-study-1-two-tier-leaf-spine-ai-fabric)

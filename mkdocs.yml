@@ -1,0 +1,57 @@
+site_name: NCP-AIN Detailed Study Guide
+site_description: Structured study guide for NVIDIA-Certified Professional AI Networking
+site_url: https://ashhadhussain-git.github.io/NCP-AIN/
+repo_url: https://github.com/ashhadhussain-git/NCP-AIN
+repo_name: ashhadhussain-git/NCP-AIN
+
+docs_dir: docs
+strict: true
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.tracking
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Study plan: study-plan.md
+  - Topology case studies:
+      - Overview: topology.md
+  - AI Data Center Design (5%): chapter-1.md
+  - NVIDIA Spectrum Networking (30%): chapter-2.md
+  - NVIDIA InfiniBand Networking (30%): chapter-3.md
+  - Kubernetes Integration (5%): chapter-4.md
+  - Troubleshooting Tools (20%): chapter-5.md
+  - Automation and Configuration (10%): chapter-6.md
+  - Official resources: resources.md
+  - Suggested readings: readings.md
+  - Guided study curriculum: curriculum.md
